@@ -42,12 +42,6 @@ const features = [
     description:
       "Tercihlerinizi, kararlarınızı, notlarınızı hatırlar. Her görüşmede sıfırdan başlamaz.",
   },
-  {
-    number: "07",
-    title: "Kişiye Özel Yapılandırma",
-    description:
-      "İş alanınıza göre özelleştirilir. Hangi haberleri takip edeceğinden raporlama sıklığına kadar her şey size göre.",
-  },
 ];
 
 const fadeUp = {
