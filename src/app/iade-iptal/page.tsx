@@ -44,6 +44,14 @@ export default function IadeIptalPage() {
         <li>Hizmet bedelinin 10 günü asan surede ödenmemesi</li>
       </ul>
 
+      <h2>Cayma Hakkı</h2>
+      <p>
+        AB ve Türkiye&apos;de ikamet eden kullanıcılar, dijital içerik
+        tüketilmemişse, satın alma tarihinden itibaren 14 gün içinde
+        herhangi bir gerekçe göstermeksizin sözleşmeden cayma hakkına
+        sahiptir.
+      </p>
+
       <h2>İade Koşulları</h2>
       <p>
         Hizmet Sağlayıcının kontrolü dısındaki sebeplerle (üçüncü taraf
@@ -80,11 +88,8 @@ export default function IadeIptalPage() {
           tamamlanır
         </li>
         <li>
-          Silme islemi tüm katmanları kapsar: sunucu, veritabanı ve
-          yedekler
-        </li>
-        <li>
-          Google Drive&apos;daki dosyalar kullanıcının hesabında kalır
+          Silme işlemi tüm katmanları kapsar: sunucu, veritabanı,
+          bulut depolama ve yedekler
         </li>
       </ul>
 
