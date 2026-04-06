@@ -8,39 +8,51 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const features = [
   {
     number: "01",
-    title: "Görsel Üretim",
+    title: "Proaktif Asistan",
     description:
-      "Ürün fotograflarınızdan profesyonel katalog görselleri. Taban değişimi, renk alternatifleri, tasarım varyasyonları.",
+      "Siz sormadan harekete geçer. Belirlediğiniz aralıklarla haber bülteni, piyasa özeti ve sektör raporları sunar.",
   },
   {
     number: "02",
-    title: "Video Üretim",
+    title: "Web Araştırma",
     description:
-      "Ürün tanıtım videoları. Statik görselleriniz hareketli içeriğe dönüşür.",
+      "İnterneti sizin adınıza tarar. Rakip analizi, fiyat karşılaştırma, trend takibi — sonuçları özetleyerek iletir.",
   },
   {
     number: "03",
-    title: "Takvim Yönetimi",
+    title: "Sosyal Medya Yönetimi",
     description:
-      "Toplantılar, fuarlar, üretim takvimleri. Hatırlatmalar ve program takibi.",
+      "Hesaplarınızda sizin adınıza aktif olur. İçerik paylaşımı, yorum takibi, mesaj yanıtlama.",
   },
   {
     number: "04",
-    title: "Dosya Yönetimi",
+    title: "Görsel ve Video Üretim",
     description:
-      "Belgelerinizin düzenlenmesi, arşivlenmesi, bulunması. Bulut depolama dahil.",
+      "Profesyonel katalog görselleri ve tanıtım videoları. Ürün fotoğraflarınız içeriğe dönüşür.",
   },
   {
     number: "05",
-    title: "Sesli İletişim",
+    title: "Takvim ve Dosya Yönetimi",
     description:
-      "Asistanınız sesli mesajlarla yanıt verir. Doğal ve akıcı iletişim.",
+      "Toplantılar, hatırlatmalar, belge arşivleme. Bulut depolama dahil, her şey düzenli.",
   },
   {
     number: "06",
+    title: "Sesli İletişim",
+    description:
+      "Sesli mesajlarla doğal iletişim. Asistanınız dinler, anlar ve sesli yanıt verir.",
+  },
+  {
+    number: "07",
     title: "Akıllı Hafıza",
     description:
       "Tercihlerinizi, kararlarınızı, notlarınızı hatırlar. Her görüşmede sıfırdan başlamaz.",
+  },
+  {
+    number: "08",
+    title: "Kişiye Özel Yapılandırma",
+    description:
+      "İş alanınıza göre özelleştirilir. Hangi haberleri takip edeceğinden raporlama sıklığına kadar her şey size göre.",
   },
 ];
 
@@ -95,8 +107,8 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.8, ease }}
             className="mx-auto mt-8 max-w-lg text-lg leading-relaxed text-muted"
           >
-            Görsel üretim, takvim, dosya yönetimi ve daha fazlası.
-            Telegram üzerinden erişebileceğiniz kişisel iş asistanınız.
+            Piyasa takibi, sosyal medya yönetimi, görsel üretim ve daha fazlası.
+            Sizin adınıza düşünen, araştıran ve harekete geçen yapay zeka asistanı.
           </motion.p>
 
           <motion.div
