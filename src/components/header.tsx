@@ -20,27 +20,26 @@ export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check auth on mount and on pathname change
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-      setLoading(false);
+    supabase.auth.getSession().then(({ data }) => {
+      setIsLoggedIn(!!data.session);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setIsLoggedIn(!!session);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [pathname]);
 
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    setUser(null);
+    setIsLoggedIn(false);
     setMenuOpen(false);
     router.push("/");
     router.refresh();
@@ -48,11 +47,14 @@ export function Header() {
 
   const isActive = (href: string) => pathname === href;
 
+  // Also treat protected paths as logged-in indicator
+  const showAuthNav = isLoggedIn || pathname.startsWith("/dashboard") || pathname === "/odeme";
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link
-          href={user ? "/dashboard" : "/"}
+          href={showAuthNav ? "/dashboard" : "/"}
           className="text-lg font-semibold tracking-tight text-accent transition-opacity hover:opacity-70"
         >
           superajan
@@ -60,7 +62,7 @@ export function Header() {
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
-          {!loading && user ? (
+          {showAuthNav ? (
             <>
               {authLinks.map((link) => (
                 <Link
@@ -82,7 +84,7 @@ export function Header() {
                 Çıkış
               </button>
             </>
-          ) : !loading ? (
+          ) : (
             <>
               {publicLinks.map((link) =>
                 link.hash ? (
@@ -116,7 +118,7 @@ export function Header() {
                 Başlayın
               </Link>
             </>
-          ) : null}
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -154,7 +156,7 @@ export function Header() {
             className="overflow-hidden border-t border-border md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
-              {!loading && user ? (
+              {showAuthNav ? (
                 <>
                   {authLinks.map((link) => (
                     <Link
@@ -177,7 +179,7 @@ export function Header() {
                     Çıkış
                   </button>
                 </>
-              ) : !loading ? (
+              ) : (
                 <>
                   {publicLinks.map((link) =>
                     link.hash ? (
@@ -215,7 +217,7 @@ export function Header() {
                     Başlayın
                   </Link>
                 </>
-              ) : null}
+              )}
             </div>
           </motion.div>
         )}
