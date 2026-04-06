@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
@@ -10,12 +11,28 @@ export default function GirisPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Backend entegrasyonu
-    setTimeout(() => setLoading(false), 1500);
+    setError("");
+
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      router.push("/dashboard");
+      router.refresh();
+    } else {
+      const data = await res.json();
+      setError(data.error || "Giriş başarısız.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,6 +65,12 @@ export default function GirisPage() {
           onSubmit={handleSubmit}
           className="mt-10 space-y-6"
         >
+          {error && (
+            <div className="rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
           <div>
             <label
               htmlFor="email"
@@ -82,22 +105,6 @@ export default function GirisPage() {
               placeholder="••••••••"
               className="mt-2 block w-full rounded-lg border border-border bg-surface px-4 py-3 text-sm text-accent placeholder:text-muted/50 outline-none transition-colors focus:border-accent"
             />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-border bg-surface accent-accent"
-              />
-              Beni hatırla
-            </label>
-            <button
-              type="button"
-              className="text-sm text-muted transition-colors hover:text-accent"
-            >
-              Şifremi unuttum
-            </button>
           </div>
 
           <button
