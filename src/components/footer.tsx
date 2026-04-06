@@ -46,7 +46,8 @@ export function Footer() {
             <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted">
               İletişim
             </p>
-            <p className="text-sm text-muted">contact@biyikgokhan.com</p>
+            <p className="text-sm text-muted">+90 531 600 23 07</p>
+            <p className="mt-1 text-sm text-muted">contact@biyikgokhan.com</p>
             <p className="mt-1 text-sm text-muted">İstanbul, Türkiye</p>
           </div>
         </div>

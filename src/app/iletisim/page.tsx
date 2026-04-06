@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 const contactInfo = [
+  { label: "Telefon", value: "+90 531 600 23 07", href: "tel:+905316002307" },
   { label: "E-posta", value: "contact@biyikgokhan.com", href: "mailto:contact@biyikgokhan.com" },
   { label: "Konum", value: "İstanbul, Türkiye", href: null },
 ];
