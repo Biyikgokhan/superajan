@@ -102,9 +102,17 @@ export function DashboardClient({ user, tenant, payment, currentMonth }: Props) 
                   </p>
                 )}
                 {!isPaid && (
-                  <p className="mt-2 text-sm text-muted">
-                    Ayın ilk 5 günü içinde ödeme yapabilirsiniz.
-                  </p>
+                  <div>
+                    <p className="mt-2 text-sm text-muted">
+                      Ayın ilk 5 günü içinde ödeme yapabilirsiniz.
+                    </p>
+                    <button
+                      onClick={() => router.push("/odeme")}
+                      className="mt-4 rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-background transition-transform hover:scale-105"
+                    >
+                      Ödeme Yap
+                    </button>
+                  </div>
                 )}
               </div>
               <div className="text-right">

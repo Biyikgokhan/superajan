@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protected routes
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
+  if (request.nextUrl.pathname.startsWith("/dashboard") || request.nextUrl.pathname === "/odeme") {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/giris";
@@ -51,5 +51,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/giris"],
+  matcher: ["/dashboard/:path*", "/giris", "/odeme"],
 };
