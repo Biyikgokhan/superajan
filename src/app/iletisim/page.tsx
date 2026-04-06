@@ -6,10 +6,10 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 const contactInfo = [
   { label: "E-posta", value: "contact@biyikgokhan.com", href: "mailto:contact@biyikgokhan.com" },
-  { label: "Konum", value: "Istanbul, Turkiye", href: null },
+  { label: "Konum", value: "İstanbul, Türkiye", href: null },
 ];
 
-export default function IletisimPage() {
+export default function İletişimPage() {
   return (
     <div className="px-6 pt-32 pb-20">
       <div className="mx-auto max-w-3xl">
@@ -19,14 +19,14 @@ export default function IletisimPage() {
           transition={{ duration: 0.8, ease }}
         >
           <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted">
-            Iletisim
+            İletişim
           </p>
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
-            Goruselim.
+            Görüşelim.
           </h1>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
             Hizmetimiz hakkında bilgi almak, demo talep etmek veya sorularınız
-            icin bizimle iletisime gecin.
+            için bizimle iletişime gecin.
           </p>
         </motion.div>
 
@@ -68,11 +68,11 @@ export default function IletisimPage() {
           className="mt-16 rounded-xl border border-border bg-surface p-8"
         >
           <h2 className="text-xl font-semibold tracking-tight text-accent">
-            Hizmet Saglayıcı Bilgileri
+            Hizmet Sağlayıcı Bilgileri
           </h2>
           <div className="mt-6 space-y-3 text-sm text-muted">
             <p>
-              <span className="text-foreground">Ad Soyad:</span> Gokhan
+              <span className="text-foreground">Ad Soyad:</span> Gökhan
               Bıyık
             </p>
             <p>
@@ -80,8 +80,8 @@ export default function IletisimPage() {
             </p>
             <p>
               <span className="text-foreground">Adres:</span> Koca
-              Mustafapasa Mah. Org. Abdurrahman Nafiz Gurman Cad. Akyuz No:
-              32 Ic Kapı No: 7 Fatih/Istanbul
+              Mustafapaşa Mah. Org. Abdurrahman Nafiz Gürman Cad. Akyüz No:
+              32 İç Kapı No: 7 Fatih/İstanbul
             </p>
             <p>
               <span className="text-foreground">E-posta:</span>{" "}

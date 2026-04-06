@@ -2,85 +2,85 @@ import { LegalLayout } from "@/components/legal-layout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Iade ve Iptal Politikasi — Superajan",
-  description: "AI Asistan hizmetine iliskin iade ve iptal kosulları",
+  title: "İade ve İptal Politikası — Superajan",
+  description: "AI Asistan hizmetine ilişkin iade ve iptal koşulları",
 };
 
-export default function IadeIptalPage() {
+export default function İadeİptalPage() {
   return (
     <LegalLayout
-      title="Iade ve Iptal Politikasi"
-      subtitle="Abonelik Yonetimi"
+      title="İade ve İptal Politikası"
+      subtitle="Abonelik Yönetimi"
       lastUpdated="Nisan 2026"
     >
-      <h2>Hizmet Suresi</h2>
+      <h2>Hizmet Süresi</h2>
       <p>
-        Hizmet sozlesmesi, imza tarihinden itibaren 1 (bir) ay sureyle
-        gecerlidir ve taraflardan birinin yazılı sona erdirme bildirimi
-        yapmaması halinde aynı sureyle otomatik olarak yenilenir.
+        Hizmet sözleşmesi, imza tarihinden itibaren 1 (bir) ay süreyle
+        geçerlidir ve taraflardan birinin yazılı sona erdirme bildirimi
+        yapmaması halinde aynı süreyle otomatik olarak yenilenir.
       </p>
 
-      <h2>Iptal ve Fesih</h2>
+      <h2>İptal ve Fesih</h2>
       <p>
-        Taraflardan her biri, yazılı bildirimde bulunarak sozlesmeyi sona
-        erdirebilir. Sozlesme, fesih bildirimi yapılan sozlesme donemi
+        Taraflardan her biri, yazılı bildirimde bulunarak sözleşmeyi sona
+        erdirebilir. Sözleşme, fesih bildirimi yapılan sözleşme dönemi
         sonunda sona erer.
       </p>
       <p>
-        Ornegin: Sozlesme baslangıc tarihi 01/01/2026 ve fesih bildirimi
-        tarihi 10/01/2026 ise sozlesme 01/02/2026 tarihinde sona erer.
-        Tarafların sozlesme sona erme tarihine kadar hak ve yukumlulukleri
+        Örneğin: Sözleşme başlangıç tarihi 01/01/2026 ve fesih bildirimi
+        tarihi 10/01/2026 ise sözleşme 01/02/2026 tarihinde sona erer.
+        Tarafların sözleşme sona erme tarihine kadar hak ve yükümlülükleri
         devam eder.
       </p>
 
-      <h2>Derhal Fesih Kosulları</h2>
-      <p>Asagıdaki hallerde sozlesme derhal feshedilebilir:</p>
+      <h2>Derhal Fesih Koşulları</h2>
+      <p>Aşağıdaki hallerde sözleşme derhal feshedilebilir:</p>
       <ul>
-        <li>Taraflardan birinin sozlesme yukumluluklerini ihlal etmesi</li>
+        <li>Taraflardan birinin sözleşme yükümlülüklerini ihlal etmesi</li>
         <li>
           Kullanıcının sistemi yetkisiz amaclarla kullanması veya sistemi
-          kopyalama/tersine muhendislik girisiminde bulunması
+          kopyalama/tersine mühendislik girişiminde bulunması
         </li>
-        <li>Hizmet bedelinin 10 gunu asan surede odenmemesi</li>
+        <li>Hizmet bedelinin 10 günü asan surede ödenmemesi</li>
       </ul>
 
-      <h2>Iade Kosulları</h2>
+      <h2>İade Koşulları</h2>
       <p>
-        Hizmet Saglayıcının kontrolu dısındaki sebeplerle (ucuncu taraf
-        hizmet saglayıcıların hizmeti durdurması, API erisiminin kalıcı
+        Hizmet Sağlayıcının kontrolü dısındaki sebeplerle (üçüncü taraf
+        hizmet sağlayıcıların hizmeti durdurması, API erişiminin kalıcı
         olarak kesilmesi, teknolojik altyapının kullanılamaz hale gelmesi
-        vb.) hizmetin surdurulememesi durumunda:
+        vb.) hizmetin sürdürülememesi durumunda:
       </p>
       <ul>
-        <li>Hizmet Saglayıcı, kullanıcıyı derhal bilgilendirir</li>
+        <li>Hizmet Sağlayıcı, kullanıcıyı derhal bilgilendirir</li>
         <li>
-          Alternatif cozum uretmek icin makul sure tanınır (en fazla 15 gun)
+          Alternatif çözüm uretmek için makul sure tanınır (en fazla 15 gün)
         </li>
         <li>
-          Alternatif cozum saglanamaması halinde, ilgili ayın
-          kullanılmamıs kalan kısmının ucreti gun bazında hesaplanarak
+          Alternatif çözüm sağlanamaması halinde, ilgili ayın
+          kullanılmamış kalan kısmının ücreti gün bazında hesaplanarak
           kullanıcıya iade edilir
         </li>
       </ul>
       <p>
-        <strong>Iade hesabı:</strong> (aylık bedel / 30) &times; kalan gun
+        <strong>İade hesabı:</strong> (aylık bedel / 30) &times; kalan gün
         sayısı
       </p>
 
       <h2>Fesih Sonrası Veriler</h2>
-      <p>Sozlesmenin sona ermesi halinde:</p>
+      <p>Sözleşmenin sona ermesi halinde:</p>
       <ul>
         <li>
-          Kullanıcı verileri, uretilen icerikler ve hafıza kayıtları,
-          kullanıcının tercihine gore teslim edilir veya kalıcı olarak
+          Kullanıcı verileri, üretilen içerikler ve hafıza kayıtları,
+          kullanıcının tercihine göre teslim edilir veya kalıcı olarak
           silinir
         </li>
         <li>
-          Teslim/silme islemi, sozlesme bitiminden itibaren 30 gun icinde
+          Teslim/silme islemi, sözleşme bitiminden itibaren 30 gün içinde
           tamamlanır
         </li>
         <li>
-          Silme islemi tum katmanları kapsar: sunucu, veritabanı ve
+          Silme islemi tüm katmanları kapsar: sunucu, veritabanı ve
           yedekler
         </li>
         <li>
@@ -88,9 +88,9 @@ export default function IadeIptalPage() {
         </li>
       </ul>
 
-      <h2>Iletisim</h2>
+      <h2>İletişim</h2>
       <p>
-        Iptal ve iade talepleriniz icin:
+        İptal ve iade talepleriniz için:
         <br />
         <strong>E-posta:</strong> contact@biyikgokhan.com
       </p>

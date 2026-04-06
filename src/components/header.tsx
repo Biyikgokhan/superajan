@@ -5,8 +5,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { href: "/#ozellikler", label: "Ozellikler" },
-  { href: "/iletisim", label: "Iletisim" },
+  { href: "/#özellikler", label: "Özellikler" },
+  { href: "/iletişim", label: "İletişim" },
 ];
 
 export function Header() {
@@ -34,10 +34,10 @@ export function Header() {
             </Link>
           ))}
           <Link
-            href="/iletisim"
+            href="/iletişim"
             className="rounded-full border border-accent px-5 py-2 text-sm text-accent transition-all hover:bg-accent hover:text-background"
           >
-            Baslayın
+            Başlayın
           </Link>
         </div>
 
@@ -87,11 +87,11 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="/iletisim"
+                href="/iletişim"
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-block rounded-full border border-accent px-5 py-2 text-center text-accent transition-all hover:bg-accent hover:text-background"
               >
-                Baslayın
+                Başlayın
               </Link>
             </div>
           </motion.div>

@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const legalLinks = [
-  { href: "/gizlilik", label: "Gizlilik Politikasi" },
-  { href: "/hizmet-sartlari", label: "Hizmet Sartlari" },
-  { href: "/iade-iptal", label: "Iade ve Iptal" },
-  { href: "/iletisim", label: "Iletisim" },
+  { href: "/gizlilik", label: "Gizlilik Politikası" },
+  { href: "/hizmet-sartlari", label: "Hizmet Şartları" },
+  { href: "/iade-iptal", label: "İade ve İptal" },
+  { href: "/iletişim", label: "İletişim" },
 ];
 
 export function Footer() {
@@ -18,7 +18,7 @@ export function Footer() {
               superajan
             </p>
             <p className="mt-2 text-sm text-muted">
-              Yapay zeka destekli kisisel is asistanınız.
+              Yapay zeka destekli kişisel iş asistanınız.
             </p>
           </div>
 
@@ -44,16 +44,16 @@ export function Footer() {
           {/* Contact */}
           <div>
             <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted">
-              Iletisim
+              İletişim
             </p>
             <p className="text-sm text-muted">contact@biyikgokhan.com</p>
-            <p className="mt-1 text-sm text-muted">Istanbul, Turkiye</p>
+            <p className="mt-1 text-sm text-muted">İstanbul, Türkiye</p>
           </div>
         </div>
 
         <div className="mt-12 border-t border-border pt-6 text-center">
           <p className="text-xs text-muted">
-            &copy; {new Date().getFullYear()} Gokhan Bıyık. Tum hakları saklıdır.
+            &copy; {new Date().getFullYear()} Gökhan Bıyık. Tüm hakları saklıdır.
           </p>
         </div>
       </div>

@@ -30,7 +30,7 @@ export function LegalLayout({
             {title}
           </h1>
           <p className="mt-4 text-sm text-muted">
-            Son guncelleme: {lastUpdated}
+            Son güncelleme: {lastUpdated}
           </p>
         </motion.div>
 

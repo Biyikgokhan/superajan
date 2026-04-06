@@ -8,39 +8,39 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const features = [
   {
     number: "01",
-    title: "Gorsel Uretim",
+    title: "Görsel Üretim",
     description:
-      "Urun fotograflarınızdan profesyonel katalog gorselleri. Taban degisimi, renk alternatifleri, tasarım varyasyonları.",
+      "Ürün fotograflarınızdan profesyonel katalog görselleri. Taban değişimi, renk alternatifleri, tasarım varyasyonları.",
   },
   {
     number: "02",
-    title: "Video Uretim",
+    title: "Video Üretim",
     description:
-      "Urun tanıtım videoları. Statik gorselleriniz hareketli icerige donusur.",
+      "Ürün tanıtım videoları. Statik görselleriniz hareketli içeriğe dönüşür.",
   },
   {
     number: "03",
-    title: "Takvim Yonetimi",
+    title: "Takvim Yönetimi",
     description:
-      "Toplantılar, fuarlar, uretim takvimleri. Hatırlatmalar ve program takibi.",
+      "Toplantılar, fuarlar, üretim takvimleri. Hatırlatmalar ve program takibi.",
   },
   {
     number: "04",
-    title: "Dosya Yonetimi",
+    title: "Dosya Yönetimi",
     description:
-      "Belgelerinizin duzenlenmesi, arsivlenmesi, bulunması. Bulut depolama dahil.",
+      "Belgelerinizin düzenlenmesi, arşivlenmesi, bulunması. Bulut depolama dahil.",
   },
   {
     number: "05",
-    title: "Sesli Iletisim",
+    title: "Sesli İletişim",
     description:
-      "Asistanınız sesli mesajlarla yanıt verir. Dogal ve akıcı iletisim.",
+      "Asistanınız sesli mesajlarla yanıt verir. Doğal ve akıcı iletişim.",
   },
   {
     number: "06",
     title: "Akıllı Hafıza",
     description:
-      "Tercihlerinizi, kararlarınızı, notlarınızı hatırlar. Her gorusmede sıfırdan baslamaz.",
+      "Tercihlerinizi, kararlarınızı, notlarınızı hatırlar. Her görüşmede sıfırdan başlamaz.",
   },
 ];
 
@@ -82,9 +82,9 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.4, ease }}
             className="text-5xl font-bold leading-[1.1] tracking-tight text-accent md:text-7xl lg:text-8xl"
           >
-            Isinizi
+            İşinizi
             <br />
-            <span className="text-muted">yoneten</span>
+            <span className="text-muted">yöneten</span>
             <br />
             asistan.
           </motion.h1>
@@ -95,8 +95,8 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.8, ease }}
             className="mx-auto mt-8 max-w-lg text-lg leading-relaxed text-muted"
           >
-            Gorsel uretim, takvim, dosya yonetimi ve daha fazlası.
-            Telegram uzerinden erisebileceginiz kisisel is asistanınız.
+            Görsel üretim, takvim, dosya yönetimi ve daha fazlası.
+            Telegram üzerinden erişebileceğiniz kişisel iş asistanınız.
           </motion.p>
 
           <motion.div
@@ -106,16 +106,16 @@ export default function Home() {
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
           >
             <Link
-              href="/iletisim"
+              href="/iletişim"
               className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-accent px-8 text-sm font-medium text-background transition-transform hover:scale-105"
             >
-              <span className="relative z-10">Hemen Baslayın</span>
+              <span className="relative z-10">Hemen Başlayın</span>
             </Link>
             <Link
-              href="/#ozellikler"
+              href="/#özellikler"
               className="inline-flex h-14 items-center justify-center rounded-full border border-border px-8 text-sm text-muted transition-all hover:border-accent hover:text-accent"
             >
-              Ozellikleri Kesfet
+              Özellikleri Keşfet
             </Link>
           </motion.div>
         </div>
@@ -138,7 +138,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section id="ozellikler" className="border-t border-border px-6 py-32">
+      <section id="özellikler" className="border-t border-border px-6 py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -147,12 +147,12 @@ export default function Home() {
             transition={{ duration: 0.8, ease }}
           >
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted">
-              Ozellikler
+              Özellikler
             </p>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
               Tek asistan,
               <br />
-              <span className="text-muted">tum isler.</span>
+              <span className="text-muted">tüm işler.</span>
             </h2>
           </motion.div>
 
@@ -182,7 +182,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Priçing */}
       <section className="border-t border-border px-6 py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
@@ -196,7 +196,7 @@ export default function Home() {
               Fiyatlandırma
             </p>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-accent md:text-5xl">
-              Basit ve seffaf.
+              Basit ve şeffaf.
             </h2>
           </motion.div>
 
@@ -217,16 +217,16 @@ export default function Home() {
               <span className="text-muted">/ay</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-muted">
-              Tum ozellikler, altyapı maliyetleri ve teknik destek dahil.
+              Tüm özellikler, altyapı maliyetleri ve teknik destek dahil.
             </p>
             <ul className="mt-8 flex flex-col gap-3">
               {[
-                "Aylık 1.000 gorsel uretim hakkı",
-                "Sesli mesaj destegi",
-                "Takvim ve dosya yonetimi",
+                "Aylık 1.000 görsel üretim hakkı",
+                "Sesli mesaj desteği",
+                "Takvim ve dosya yönetimi",
                 "15 GB bulut depolama",
                 "7/24 teknik destek",
-                "Surekli guncelleme ve iyilestirme",
+                "Sürekli güncelleme ve iyileştirme",
               ].map((item) => (
                 <li
                   key={item}
@@ -238,10 +238,10 @@ export default function Home() {
               ))}
             </ul>
             <Link
-              href="/iletisim"
+              href="/iletişim"
               className="mt-10 flex h-14 w-full items-center justify-center rounded-full bg-accent text-sm font-medium text-background transition-transform hover:scale-[1.02]"
             >
-              Iletisime Gecin
+              İletişime Geçin
             </Link>
           </motion.div>
         </div>
@@ -263,10 +263,10 @@ export default function Home() {
             Yapay zeka asistanınız sizi bekliyor.
           </p>
           <Link
-            href="/iletisim"
+            href="/iletişim"
             className="mt-10 inline-flex h-14 items-center justify-center rounded-full bg-accent px-10 text-sm font-medium text-background transition-transform hover:scale-105"
           >
-            Hemen Baslayın
+            Hemen Başlayın
           </Link>
         </motion.div>
       </section>
