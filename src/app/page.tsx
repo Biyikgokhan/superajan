@@ -106,7 +106,7 @@ export default function Home() {
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
           >
             <Link
-              href="https://app.superajan.com/login"
+              href="/giris"
               className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-accent px-8 text-sm font-medium text-background transition-transform hover:scale-105"
             >
               <span className="relative z-10">Hemen Başlayın</span>
@@ -263,7 +263,7 @@ export default function Home() {
             Yapay zeka asistanınız sizi bekliyor.
           </p>
           <Link
-            href="https://app.superajan.com/login"
+            href="/giris"
             className="mt-10 inline-flex h-14 items-center justify-center rounded-full bg-accent px-10 text-sm font-medium text-background transition-transform hover:scale-105"
           >
             Hemen Başlayın

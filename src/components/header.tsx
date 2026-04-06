@@ -44,13 +44,13 @@ export function Header() {
             )
           )}
           <Link
-            href="https://app.superajan.com/login"
+            href="/giris"
             className="text-sm text-muted transition-colors hover:text-accent"
           >
             Giriş
           </Link>
           <Link
-            href="https://app.superajan.com/login"
+            href="/giris"
             className="rounded-full border border-accent px-5 py-2 text-sm text-accent transition-all hover:bg-accent hover:text-background"
           >
             Başlayın
@@ -114,14 +114,14 @@ export function Header() {
                 )
               )}
               <Link
-                href="https://app.superajan.com/login"
+                href="/giris"
                 onClick={() => setMenuOpen(false)}
                 className="text-lg text-muted transition-colors hover:text-accent"
               >
                 Giriş
               </Link>
               <Link
-                href="https://app.superajan.com/login"
+                href="/giris"
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 inline-block rounded-full border border-accent px-5 py-2 text-center text-accent transition-all hover:bg-accent hover:text-background"
               >

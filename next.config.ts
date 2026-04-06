@@ -5,12 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/odeme",
-        destination: "https://app.superajan.com/login",
-        permanent: false,
-      },
-      {
-        source: "/giris",
-        destination: "https://app.superajan.com/login",
+        destination: "/giris",
         permanent: false,
       },
     ];
