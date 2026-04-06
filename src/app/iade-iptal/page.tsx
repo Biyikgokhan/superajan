@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "AI Asistan hizmetine ilişkin iade ve iptal koşulları",
 };
 
-export default function İadeİptalPage() {
+export default function IadeIptalPage() {
   return (
     <LegalLayout
       title="İade ve İptal Politikası"

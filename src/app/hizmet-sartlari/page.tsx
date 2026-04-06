@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "AI Asistan Hizmet ve Lisans Sözleşmesi koşulları",
 };
 
-export default function HizmetŞartlarıPage() {
+export default function HizmetSartlariPage() {
   return (
     <LegalLayout
       title="Hizmet Şartları"

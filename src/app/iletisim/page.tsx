@@ -9,7 +9,7 @@ const contactInfo = [
   { label: "Konum", value: "İstanbul, Türkiye", href: null },
 ];
 
-export default function İletişimPage() {
+export default function IletisimPage() {
   return (
     <div className="px-6 pt-32 pb-20">
       <div className="mx-auto max-w-3xl">
