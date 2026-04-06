@@ -106,7 +106,7 @@ export default function Home() {
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
           >
             <Link
-              href="/iletişim"
+              href="/iletisim"
               className="group relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-accent px-8 text-sm font-medium text-background transition-transform hover:scale-105"
             >
               <span className="relative z-10">Hemen Başlayın</span>
@@ -138,7 +138,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section id="özellikler" className="border-t border-border px-6 py-32">
+      <section id="ozellikler" className="border-t border-border px-6 py-32">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -238,7 +238,7 @@ export default function Home() {
               ))}
             </ul>
             <Link
-              href="/iletişim"
+              href="/iletisim"
               className="mt-10 flex h-14 w-full items-center justify-center rounded-full bg-accent text-sm font-medium text-background transition-transform hover:scale-[1.02]"
             >
               İletişime Geçin
@@ -263,7 +263,7 @@ export default function Home() {
             Yapay zeka asistanınız sizi bekliyor.
           </p>
           <Link
-            href="/iletişim"
+            href="/iletisim"
             className="mt-10 inline-flex h-14 items-center justify-center rounded-full bg-accent px-10 text-sm font-medium text-background transition-transform hover:scale-105"
           >
             Hemen Başlayın
