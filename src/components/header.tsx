@@ -5,8 +5,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { href: "/#ozellikler", label: "Özellikler" },
-  { href: "/iletisim", label: "İletişim" },
+  { href: "/#ozellikler", label: "Özellikler", hash: true },
+  { href: "/iletisim", label: "İletişim", hash: false },
 ];
 
 export function Header() {
@@ -24,15 +24,25 @@ export function Header() {
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted transition-colors hover:text-accent"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.hash ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-muted transition-colors hover:text-accent"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-muted transition-colors hover:text-accent"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
           <Link
             href="/giris"
             className="text-sm text-muted transition-colors hover:text-accent"
@@ -82,16 +92,27 @@ export function Header() {
             className="overflow-hidden border-t border-border md:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-lg text-muted transition-colors hover:text-accent"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                link.hash ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-lg text-muted transition-colors hover:text-accent"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-lg text-muted transition-colors hover:text-accent"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
               <Link
                 href="/giris"
                 onClick={() => setMenuOpen(false)}

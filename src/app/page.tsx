@@ -112,7 +112,7 @@ export default function Home() {
               <span className="relative z-10">Hemen Başlayın</span>
             </Link>
             <Link
-              href="/#özellikler"
+              href="/#ozellikler"
               className="inline-flex h-14 items-center justify-center rounded-full border border-border px-8 text-sm text-muted transition-all hover:border-accent hover:text-accent"
             >
               Özellikleri Keşfet
