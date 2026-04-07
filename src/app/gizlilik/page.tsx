@@ -131,10 +131,10 @@ export default function GizlilikPage() {
             <td>Standart Sözleşme</td>
           </tr>
           <tr>
-            <td>Bulut depolama</td>
+            <td>Google Workspace (müşterinin kendi hesabı)</td>
             <td>ABD</td>
-            <td>Takvim verileri, dosyalar</td>
-            <td>Takvim ve dosya yönetimi</td>
+            <td>Takvim verileri, dosyalar, e-postalar</td>
+            <td>Takvim, dosya ve e-posta yönetimi (OAuth erişim)</td>
             <td>Standart Sözleşme</td>
           </tr>
           <tr>

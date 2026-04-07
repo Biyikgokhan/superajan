@@ -137,7 +137,7 @@ export function DashboardClient({ user, tenant, payment, currentMonth }: Props) 
             {[
               { label: "Plan", value: "Aylık Paket" },
               { label: "Görsel Hakkı", value: "1.000 / ay" },
-              { label: "Depolama", value: "15 GB" },
+              { label: "Workspace", value: "Google (OAuth)" },
               { label: "Durum", value: "Aktif" },
             ].map((item) => (
               <div key={item.label} className="flex justify-between border-b border-border py-3 last:border-0 sm:border-0 sm:flex-col sm:py-0">

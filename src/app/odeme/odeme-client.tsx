@@ -143,7 +143,8 @@ function ContractModal({
               <strong className="text-accent">2. Hizmet Kapsamı —</strong> Yapay
               zeka destekli kişisel asistan (Telegram bot arayüzü), aylık 1.000
               görsel ve 50 video üretim hakkı, sesli mesaj ile iletişim, takvim yönetimi ve
-              hatırlatmalar, Google Drive dosya yönetimi, not alma, hafıza ve
+              hatırlatmalar, müşterinin kendi Google Workspace hesabının yönetimi
+              (Drive, Takvim, Gmail — OAuth izniyle erişim), not alma, hafıza ve
               bilgi kayıt sistemi, araştırma ve analiz desteği.
             </p>
             <p>
@@ -296,7 +297,7 @@ export function OdemeClient({
                     "1.000 görsel ve 50 video üretim hakkı",
                     "Sesli mesaj desteği",
                     "Takvim ve dosya yönetimi",
-                    "15 GB bulut depolama",
+                    "Google Workspace entegrasyonu",
                     "Teknik destek",
                     "Sürekli güncelleme",
                   ].map((item) => (

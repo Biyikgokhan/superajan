@@ -88,8 +88,9 @@ export default function IadeIptalPage() {
           tamamlanır
         </li>
         <li>
-          Silme işlemi tüm katmanları kapsar: sunucu, veritabanı,
-          bulut depolama ve yedekler
+          Silme işlemi tüm katmanları kapsar: sunucu, veritabanı
+          ve yedekler. Müşterinin kendi Google Workspace hesabındaki
+          veriler müşteriye ait olup Hizmet Sağlayıcı tarafından silinmez
         </li>
       </ul>
 

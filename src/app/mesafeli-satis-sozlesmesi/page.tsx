@@ -151,7 +151,7 @@ export default function MesafeliSatisSozlesmesiPage() {
         <li>Aylık 1.000 görsel ve 50 video üretim hakkı (ürün fotoğrafı, tanıtım videosu)</li>
         <li>Sesli mesaj ile iletişim</li>
         <li>Takvim yönetimi ve hatırlatmalar</li>
-        <li>Google Drive dosya yönetimi</li>
+        <li>Müşterinin kendi Google Workspace hesabının yönetimi (Drive, Takvim, Gmail — OAuth izniyle erişim)</li>
         <li>Not alma, hafıza ve bilgi kayıt sistemi</li>
         <li>Araştırma ve analiz desteği</li>
       </ul>

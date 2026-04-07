@@ -28,7 +28,7 @@ const features = [
     number: "04",
     title: "Takvim ve Dosya Yönetimi",
     description:
-      "Toplantılar, hatırlatmalar, belge arşivleme. Bulut depolama dahil, her şey düzenli.",
+      "Toplantılar, hatırlatmalar, belge arşivleme. Google Workspace'inizi (Drive, Takvim, Gmail) sizin adınıza yönetir.",
   },
   {
     number: "05",
@@ -224,7 +224,7 @@ export default function Home() {
                 "Aylık 1.000 görsel ve 50 video üretim hakkı",
                 "Sesli mesaj desteği",
                 "Takvim ve dosya yönetimi",
-                "15 GB bulut depolama",
+                "Google Workspace entegrasyonu (Drive, Takvim, Gmail)",
                 "7/24 teknik destek",
                 "Sürekli güncelleme ve iyileştirme",
               ].map((item) => (

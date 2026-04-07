@@ -90,8 +90,9 @@ export default function HizmetSartlariPage() {
         </li>
         <li>Video üretim: Aylık 50 video üretim hakkı (Kling) — ürün tanıtım videoları</li>
         <li>Sesli iletişim: Asistanın sesli mesaj ile yanıt vermesi</li>
-        <li>Takvim yönetimi: Etkinlik ekleme, hatırlatma, program takibi</li>
-        <li>Dosya yönetimi: Google Drive üzerinde düzenleme ve arşivleme</li>
+        <li>Takvim yönetimi: Müşterinin Google Takvim hesabında etkinlik ekleme, hatırlatma, program takibi</li>
+        <li>Dosya yönetimi: Müşterinin kendi Google Drive hesabında düzenleme ve arşivleme</li>
+        <li>Gmail yönetimi: Müşterinin kendi Gmail hesabında e-posta takibi ve taslak oluşturma</li>
         <li>Not alma ve hafıza: Tercih, karar ve bilgi kaydı</li>
       </ul>
       <p>
@@ -115,6 +116,26 @@ export default function HizmetSartlariPage() {
         Hizmet Sağlayıcı, üçüncü taraf hizmetlerin veri güvenliği
         ihlallerinden doğrudan sorumlu değildir; ancak makul güvenlik
         önlemlerini almakla ve kullanıcıyı bilgilendirmekle yükümlüdür.
+      </p>
+
+      <h2>7.1 Google Workspace Erişimi</h2>
+      <p>
+        Sistem, kullanıcının iş süreçlerini yönetmek amacıyla kullanıcının
+        kendi Google Workspace hesabına (Google Drive, Google Takvim, Gmail)
+        OAuth 2.0 protokolü aracılığıyla ve kullanıcının açık izniyle erişir.
+      </p>
+      <p>
+        Hizmet Sağlayıcı bulut depolama alanı sağlamaz. Drive, Takvim ve
+        Gmail&apos;deki tüm veriler kullanıcının kendi Google hesabında
+        barınır ve münhasıran kullanıcının mülkiyetindedir. Hizmet Sağlayıcı
+        bu verileri kendi sunucularında saklamaz.
+      </p>
+      <p>
+        Kullanıcı, Google Workspace erişim iznini dilediği zaman Google
+        hesap ayarlarından veya Hizmet Sağlayıcı&apos;ya yazılı bildirimde
+        bulunarak iptal edebilir. Erişimin iptal edilmesi halinde takvim
+        yönetimi, dosya yönetimi ve e-posta takibi gibi Google Workspace
+        bağımlı özellikler devre dışı kalır.
       </p>
 
       <h2>8. Veri Saklama ve Silme</h2>
