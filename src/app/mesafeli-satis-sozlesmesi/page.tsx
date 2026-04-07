@@ -71,13 +71,14 @@ export default function MesafeliSatisSozlesmesiPage() {
         edilir.
       </p>
       <p>
-        Tüm fiyatlara KDV dahildir. Hizmet bedeli değişikliği en az 10 gün
-        önceden yazılı olarak bildirilir.
+        Belirtilen fiyatlara KDV dahil değildir. Ödeme sırasında %20 KDV
+        ayrıca hesaplanarak toplam tutara eklenir. Hizmet bedeli değişikliği
+        en az 10 gün önceden yazılı olarak bildirilir.
       </p>
 
       <h2>5. Hizmetin İfası ve Teslimatı</h2>
       <p>
-        Hizmet, ödemenin onaylanmasını takiben 24 saat içinde aktif hale
+        Hizmet, ödemenin onaylanmasını takiben 48 saat içinde aktif hale
         getirilir. Hizmet aktivasyonu Telegram üzerinden gerçekleştirilir ve
         kullanıcıya bildirim yapılır.
       </p>
