@@ -86,9 +86,9 @@ export default function HizmetSartlariPage() {
       <h2>5. Hizmet Kapsamı</h2>
       <ul>
         <li>
-          Görsel üretim: Ürün fotograflarından profesyonel katalog görselleri
+          Görsel üretim: Aylık 1.000 görsel üretim hakkı — ürün fotograflarından profesyonel katalog görselleri
         </li>
-        <li>Video üretim: Ürün tanıtım videoları</li>
+        <li>Video üretim: Aylık 50 video üretim hakkı (Kling) — ürün tanıtım videoları</li>
         <li>Sesli iletişim: Asistanın sesli mesaj ile yanıt vermesi</li>
         <li>Takvim yönetimi: Etkinlik ekleme, hatırlatma, program takibi</li>
         <li>Dosya yönetimi: Google Drive üzerinde düzenleme ve arşivleme</li>

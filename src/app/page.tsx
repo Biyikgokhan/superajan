@@ -221,7 +221,7 @@ export default function Home() {
             </p>
             <ul className="mt-8 flex flex-col gap-3">
               {[
-                "Aylık 1.000 görsel üretim hakkı",
+                "Aylık 1.000 görsel ve 50 video üretim hakkı",
                 "Sesli mesaj desteği",
                 "Takvim ve dosya yönetimi",
                 "15 GB bulut depolama",

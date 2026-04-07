@@ -148,7 +148,7 @@ export default function MesafeliSatisSozlesmesiPage() {
       </p>
       <ul>
         <li>Yapay zeka destekli kişisel asistan (Telegram bot arayüzü)</li>
-        <li>Görsel ve video üretim (ürün fotoğrafı, tanıtım videosu)</li>
+        <li>Aylık 1.000 görsel ve 50 video üretim hakkı (ürün fotoğrafı, tanıtım videosu)</li>
         <li>Sesli mesaj ile iletişim</li>
         <li>Takvim yönetimi ve hatırlatmalar</li>
         <li>Google Drive dosya yönetimi</li>
