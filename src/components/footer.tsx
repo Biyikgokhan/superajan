@@ -3,8 +3,9 @@ import Link from "next/link";
 const legalLinks = [
   { href: "/gizlilik", label: "Gizlilik Politikası" },
   { href: "/hizmet-sartlari", label: "Hizmet Şartları" },
+  { href: "/mesafeli-satis-sozlesmesi", label: "Mesafeli Satış Sözleşmesi" },
   { href: "/iade-iptal", label: "İade ve İptal" },
-  { href: "/iletişim", label: "İletişim" },
+  { href: "/iletisim", label: "İletişim" },
 ];
 
 export function Footer() {
