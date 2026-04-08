@@ -62,7 +62,7 @@ export function initiate3DSecure(params: {
     action: GARANTI_3D_URL,
     fields: {
       mode: "PROD",
-      apiversion: "v0.01",
+      apiversion: "v1.0",
       terminalprovuserid: PROVAUT_USER,
       terminaluserid: PROVAUT_USER,
       terminalmerchantid: MERCHANT_ID,
