@@ -134,11 +134,10 @@ export async function complete3DSecure(callbackParams: {
   const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
 
   // Provision hash for 3D completion:
-  // SecurityData = SHA1(password + paddedTerminalId)
-  // HashData = SHA512(orderId + terminalId + cardNumber + amount + securityData)
-  // cardNumber is empty for 3D completion (card data in Md field)
+  // SecurityData = SHA1(password + paddedTerminalId)  ← padded (9 hane)
+  // HashData = SHA512(orderId + TERMINAL_ID + cardNumber + amount + currencyCode + securityData)  ← raw (8 hane)
   const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
-  const provHashStr = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, securityData].join("");
+  const provHashStr = [orderid, TERMINAL_ID, "" /*cardNumber*/, amount, "949", securityData].join("");
   const provHash = sha512(provHashStr);
 
   // Try SHA512 first (Version 512)
