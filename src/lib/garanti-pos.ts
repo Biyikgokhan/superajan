@@ -133,27 +133,23 @@ export async function complete3DSecure(callbackParams: {
 
   const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
 
-  // Provision hash for 3D completion:
-  // SecurityData = SHA1(password + paddedTerminalId)  ← padded (9 hane)
-  // HashData = SHA512(orderId + TERMINAL_ID + cardNumber + amount + currencyCode + securityData)  ← raw (8 hane)
+  // Provision hash (from dev.garantibbva.com.tr):
+  // SecurityData = SHA1(password + "0" + terminalId) = SHA1(password + paddedTerminalId)
+  // HashData = SHA512(orderId + terminalId + cardNumber + amount + currencyCode + securityData)
+  // terminalId in hash = RAW (not padded), same as XML <ID> field
   const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
-  // Try both hash versions
-  const provHashStr512 = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, "949", securityData].join("");
-  const provHash512 = sha512(provHashStr512);
+  const provHashStr = [orderid, TERMINAL_ID, "" /*cardNumber*/, amount, "949", securityData].join("");
+  const provHash = sha512(provHashStr);
 
-  const provHashStr1 = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, securityData].join("");
-  const provHash1 = sha1(provHashStr1);
-
-  // Use v0.01 + SHA1 first (more compatible), fallback to 512
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <GVPSRequest>
   <Mode>PROD</Mode>
-  <Version>v0.01</Version>
+  <Version>512</Version>
   <Terminal>
     <ProvUserID>${PROVAUT_USER}</ProvUserID>
-    <HashData>${provHash1}</HashData>
+    <HashData>${provHash}</HashData>
     <UserID>${PROVAUT_USER}</UserID>
-    <ID>${paddedTerminalId}</ID>
+    <ID>${TERMINAL_ID}</ID>
     <MerchantID>${MERCHANT_ID}</MerchantID>
   </Terminal>
   <Customer>
