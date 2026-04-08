@@ -49,9 +49,11 @@ export function initiate3DSecure(params: {
   const orderId = generateOrderId();
   const amountStr = params.amount.toString(); // kuruş cinsinden
 
-  // Security hash for 3D: SHA1(TERMINAL_ID_PADDED + ORDER_ID + AMOUNT + SUCCESS_URL + ERROR_URL + txntype + installmentcount + STORE_KEY)
+  // Security hash for 3D: SHA1(TERMINAL_ID_PADDED + ORDER_ID + AMOUNT + SUCCESS_URL + ERROR_URL + txntype + installmentcount + STORE_KEY + HASHED_PASSWORD)
+  // HASHED_PASSWORD = SHA1(PROVAUT_PASSWORD + TERMINAL_ID_PADDED)
   const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
-  const hashData = `${paddedTerminalId}${orderId}${amountStr}${SUCCESS_URL}${ERROR_URL}sales${STORE_KEY}`;
+  const hashedPassword = sha1(PROVAUT_PASSWORD + paddedTerminalId).toUpperCase();
+  const hashData = `${paddedTerminalId}${orderId}${amountStr}${SUCCESS_URL}${ERROR_URL}sales${STORE_KEY}${hashedPassword}`;
   const secureHash = sha1(hashData).toUpperCase();
 
   return {
