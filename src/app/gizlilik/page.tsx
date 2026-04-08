@@ -14,7 +14,7 @@ export default function GizlilikPage() {
       lastUpdated="Nisan 2026"
     >
       <p>
-        <strong>Veri İşleyen:</strong> Gökhan Bıyık (Hizmet Sağlayıcı)
+        <strong>Veri Sorumlusu:</strong> Gökhan Bıyık (Hizmet Sağlayıcı)
         <br />
         <strong>VKN:</strong> 1680372767
         <br />
@@ -319,7 +319,7 @@ export default function GizlilikPage() {
       <h2>9. İletişim</h2>
       <p>Kişisel verilerinize ilişkin talepleriniz için:</p>
       <p>
-        <strong>Veri İşleyen:</strong> Gökhan Bıyık
+        <strong>Veri Sorumlusu:</strong> Gökhan Bıyık
         <br />
         <strong>VKN:</strong> 1680372767
         <br />

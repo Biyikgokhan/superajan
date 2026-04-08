@@ -150,10 +150,11 @@ export default function MesafeliSatisSozlesmesiPage() {
         <li>Yapay zeka destekli kişisel asistan (Telegram bot arayüzü)</li>
         <li>Aylık 1.000 görsel ve 50 video üretim hakkı (ürün fotoğrafı, tanıtım videosu)</li>
         <li>Sesli mesaj ile iletişim</li>
+        <li>Doküman analizi: dosyaları okuma, yorumlama, karşılaştırma ve özetleme</li>
+        <li>Araştırma ve piyasa takibi: rakip analizi, trend takibi, sektör raporları</li>
         <li>Takvim yönetimi ve hatırlatmalar</li>
         <li>Müşterinin kendi Google Workspace hesabının yönetimi (Drive, Takvim, Gmail — OAuth izniyle erişim)</li>
         <li>Not alma, hafıza ve bilgi kayıt sistemi</li>
-        <li>Araştırma ve analiz desteği</li>
       </ul>
       <p>
         Aylık hizmet bedeli, tüm özellikleri, altyapı maliyetlerini ve teknik
@@ -261,6 +262,22 @@ export default function MesafeliSatisSozlesmesiPage() {
         7.13 — SATICI yukarıdaki konularda gerekli görebileceği her türlü
         değişikliği yapma hakkını saklı tutar; bu değişiklikler SİTE&apos;den
         veya diğer uygun yöntemler ile duyurulduğu andan itibaren geçerli olur.
+      </p>
+
+      <h2>7.14 Yapay Zeka Teknolojisi ve Sorumluluk Sınırlaması</h2>
+      <p>
+        Bu hizmet yapay zeka teknolojisi üzerine kurulmuştur. Yapay zeka
+        sistemleri zaman zaman hatalı, eksik veya beklenmedik sonuçlar
+        üretebilir. Bu durum; üretilen içerikler (görseller, videolar,
+        metinler), doküman analizleri, piyasa yorumları, araştırma
+        sonuçları, takvim hatırlatmaları ve öneriler dahil tüm çıktılar
+        için geçerlidir.
+      </p>
+      <p>
+        ALICI, asistanın sunduğu bilgi ve analizleri nihai karar aracı
+        olarak değil, destekleyici referans olarak kullanmakla yükümlüdür.
+        SATICI, yapay zekanın ürettiği sonuçlara dayalı kararlardan doğan
+        doğrudan veya dolaylı zararlardan sorumlu tutulamaz.
       </p>
 
       <h2>8. Cayma Hakkı</h2>

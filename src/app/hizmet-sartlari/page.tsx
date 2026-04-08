@@ -90,6 +90,8 @@ export default function HizmetSartlariPage() {
         </li>
         <li>Video üretim: Aylık 50 video üretim hakkı (Kling) — ürün tanıtım videoları</li>
         <li>Sesli iletişim: Asistanın sesli mesaj ile yanıt vermesi</li>
+        <li>Doküman analizi: Müşterinin dosyalarını okuma, yorumlama, karşılaştırma ve özetleme</li>
+        <li>Araştırma ve piyasa takibi: Rakip analizi, trend takibi, döviz ve emtia takibi, sektör raporları</li>
         <li>Takvim yönetimi: Müşterinin Google Takvim hesabında etkinlik ekleme, hatırlatma, program takibi</li>
         <li>Dosya yönetimi: Müşterinin kendi Google Drive hesabında düzenleme ve arşivleme</li>
         <li>Gmail yönetimi: Müşterinin kendi Gmail hesabında e-posta takibi ve taslak oluşturma</li>
@@ -176,8 +178,21 @@ export default function HizmetSartlariPage() {
       <p>
         Bu hizmet, yapay zeka teknolojisi üzerine kurulmuştur. Yapay zeka
         sistemleri zaman zaman hatalı, eksik veya beklenmedik sonuçlar
-        üretebilir. Kullanıcı, üretilen içerikleri yayınlamadan veya ticari
-        amacla kullanmadan önce kontrol etmekle yükümlüdür.
+        üretebilir. Bu durum; üretilen içerikler (görseller, videolar,
+        metinler), doküman analizleri, piyasa yorumları, araştırma
+        sonuçları, takvim hatırlatmaları ve öneriler dahil tüm çıktılar
+        için geçerlidir.
+      </p>
+      <p>
+        Kullanıcı, asistanın sunduğu bilgi ve analizleri nihai karar aracı
+        olarak değil, destekleyici referans olarak kullanmakla yükümlüdür.
+        Üretilen içerikleri yayınlamadan veya ticari amacla kullanmadan
+        önce kontrol etmek kullanıcının sorumluluğundadır.
+      </p>
+      <p>
+        Hizmet Sağlayıcı, yapay zekanın ürettiği sonuçlara dayalı
+        kararlardan doğan doğrudan veya dolaylı zararlardan sorumlu
+        tutulamaz.
       </p>
 
       <h2>12. Gizlilik</h2>
