@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/dashboard";
 
   if (code) {
     const cookieStore = await cookies();
@@ -29,27 +28,11 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check if user has a tenant (for onboarding redirect)
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-        const { data: tenant } = await supabase
-          .from("tenants")
-          .select("id")
-          .eq("auth_user_id", user.id)
-          .single();
-
-        if (!tenant) {
-          return NextResponse.redirect(`${origin}/onboarding`);
-        }
-      }
-
-      return NextResponse.redirect(`${origin}${next}`);
+      // Google Workspace connected — go back to dashboard
+      return NextResponse.redirect(`${origin}/dashboard`);
     }
   }
 
-  // Auth error — redirect to login with error
-  return NextResponse.redirect(`${origin}/giris?error=auth`);
+  // Auth error — redirect to dashboard with error param
+  return NextResponse.redirect(`${origin}/dashboard?error=google_connect`);
 }

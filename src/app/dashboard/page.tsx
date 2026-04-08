@@ -33,12 +33,16 @@ export default async function DashboardPage() {
     .eq("period", currentMonth)
     .single();
 
+  // Check if user logged in via Google (has Google identity)
+  const googleConnected = user.app_metadata?.providers?.includes("google") ?? false;
+
   return (
     <DashboardClient
       user={user}
       tenant={tenant}
       payment={payment}
       currentMonth={currentMonth}
+      googleConnected={googleConnected}
     />
   );
 }
