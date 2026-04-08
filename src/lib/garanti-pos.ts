@@ -49,11 +49,12 @@ export function initiate3DSecure(params: {
   const orderId = generateOrderId();
   const amountStr = params.amount.toString(); // kuruş cinsinden
 
-  // Security hash for 3D: SHA1(TERMINAL_ID_PADDED + ORDER_ID + AMOUNT + SUCCESS_URL + ERROR_URL + txntype + installmentcount + STORE_KEY + HASHED_PASSWORD)
-  // HASHED_PASSWORD = SHA1(PROVAUT_PASSWORD + TERMINAL_ID_PADDED)
+  // Garanti 3D Secure Hash:
+  // Step 1: SecurityData = SHA1(PROVAUT_PASSWORD + "0" + TERMINAL_ID_9_DIGIT)
+  // Step 2: Hash = SHA1(TERMINAL_ID_9_DIGIT + ORDER_ID + AMOUNT + SUCCESS_URL + ERROR_URL + TYPE + INSTALLMENT + STORE_KEY + SecurityData)
   const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
-  const hashedPassword = sha1(PROVAUT_PASSWORD + paddedTerminalId).toUpperCase();
-  const hashData = `${paddedTerminalId}${orderId}${amountStr}${SUCCESS_URL}${ERROR_URL}sales${STORE_KEY}${hashedPassword}`;
+  const securityData = sha1(PROVAUT_PASSWORD + "0" + paddedTerminalId).toUpperCase();
+  const hashData = `${paddedTerminalId}${orderId}${amountStr}${SUCCESS_URL}${ERROR_URL}sales${STORE_KEY}${securityData}`;
   const secureHash = sha1(hashData).toUpperCase();
 
   return {
