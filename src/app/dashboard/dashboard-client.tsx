@@ -73,9 +73,11 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
   const router = useRouter();
   const isPaid = payment?.status === "paid";
   const [connecting, setConnecting] = useState(false);
+  const [connectError, setConnectError] = useState("");
 
   const handleConnectGoogle = async () => {
     setConnecting(true);
+    setConnectError("");
     const supabase = createClient();
     const { error } = await supabase.auth.linkIdentity({
       provider: "google",
@@ -93,7 +95,22 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
         },
       },
     });
-    if (error) setConnecting(false);
+    if (error) {
+      setConnectError(error.message);
+      setConnecting(false);
+    }
+  };
+
+  const handleDisconnectGoogle = async () => {
+    const supabase = createClient();
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    const googleIdentity = currentUser?.identities?.find(
+      (i) => i.provider === "google"
+    );
+    if (googleIdentity) {
+      await supabase.auth.unlinkIdentity(googleIdentity);
+      router.refresh();
+    }
   };
 
   return (
@@ -273,29 +290,43 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
             )}
           </div>
 
+          {connectError && (
+            <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 px-4 py-3 text-sm text-red-400">
+              {connectError}
+            </div>
+          )}
+
           {googleConnected ? (
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                { name: "Gmail", icon: "M" },
-                { name: "Calendar", icon: "C" },
-                { name: "Drive", icon: "D" },
-                { name: "Sheets", icon: "S" },
-              ].map((service) => (
-                <div
-                  key={service.name}
-                  className="flex items-center gap-3 rounded-xl border border-border px-4 py-3"
-                >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-xs font-bold text-accent">
-                    {service.icon}
+            <div className="mt-5">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[
+                  { name: "Gmail", icon: "M" },
+                  { name: "Calendar", icon: "C" },
+                  { name: "Drive", icon: "D" },
+                  { name: "Sheets", icon: "S" },
+                ].map((service) => (
+                  <div
+                    key={service.name}
+                    className="flex items-center gap-3 rounded-xl border border-border px-4 py-3"
+                  >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-xs font-bold text-accent">
+                      {service.icon}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-accent">
+                        {service.name}
+                      </p>
+                      <p className="text-xs text-green-400">Aktif</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-accent">
-                      {service.name}
-                    </p>
-                    <p className="text-xs text-green-400">Aktif</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <button
+                onClick={handleDisconnectGoogle}
+                className="mt-4 text-xs text-muted transition-colors hover:text-red-400"
+              >
+                Bağlantıyı Kes
+              </button>
             </div>
           ) : (
             <div className="mt-5">
