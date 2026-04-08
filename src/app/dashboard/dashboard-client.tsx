@@ -9,7 +9,7 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 type Props = {
   user: { id: string; email?: string };
-  tenant: { id: string; name: string; company: string } | null;
+  tenant: { id: string; name: string } | null;
   payment: {
     id: string;
     period: string;
@@ -72,7 +72,6 @@ function GoogleIcon() {
 export function DashboardClient({ user, tenant, payment, currentMonth, googleConnected }: Props) {
   const router = useRouter();
   const isPaid = payment?.status === "paid";
-  const firstName = tenant?.name?.split(" ")[0] || "";
   const [connecting, setConnecting] = useState(false);
 
   const handleConnectGoogle = async () => {
@@ -110,9 +109,9 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
             Dashboard
           </p>
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-accent sm:text-3xl">
-            Merhaba{firstName ? `, ${firstName}` : ""}.
+            Hoş geldiniz.
           </h1>
-          <p className="mt-1 text-sm text-muted">{tenant?.company}</p>
+          <p className="mt-1 text-sm text-muted">{tenant?.name}</p>
         </motion.div>
 
         {/* Stats Grid */}

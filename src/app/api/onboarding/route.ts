@@ -56,10 +56,18 @@ export async function POST(request: Request) {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
+  // Generate slug from company name
+  const slug = company
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
+
   const { error } = await admin.from("tenants").insert({
     auth_user_id: user.id,
-    name,
-    company,
+    name: company,
+    slug,
     phone: phone || null,
     sector: sector || null,
     email: user.email,
