@@ -29,17 +29,38 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protected routes
-  if (request.nextUrl.pathname.startsWith("/dashboard") || request.nextUrl.pathname === "/odeme") {
+  const pathname = request.nextUrl.pathname;
+
+  // Protected routes — require auth
+  if (
+    pathname.startsWith("/dashboard") ||
+    pathname === "/odeme" ||
+    pathname === "/onboarding"
+  ) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/giris";
       return NextResponse.redirect(url);
     }
+
+    // Check if user has completed onboarding (has a tenant record)
+    if (pathname !== "/onboarding") {
+      const { data: tenant } = await supabase
+        .from("tenants")
+        .select("id")
+        .eq("auth_user_id", user.id)
+        .single();
+
+      if (!tenant) {
+        const url = request.nextUrl.clone();
+        url.pathname = "/onboarding";
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
-  // Redirect logged-in users away from login
-  if (request.nextUrl.pathname === "/giris") {
+  // Redirect logged-in users away from login page
+  if (pathname === "/giris") {
     if (user) {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
@@ -51,5 +72,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/giris", "/odeme"],
+  matcher: ["/dashboard/:path*", "/giris", "/odeme", "/onboarding"],
 };
