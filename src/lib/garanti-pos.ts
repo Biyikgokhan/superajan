@@ -15,14 +15,18 @@ const TERMINAL_ID = process.env.GARANTI_TERMINAL_ID!;
 const PROVAUT_USER = process.env.GARANTI_PROVAUT_USER || "PROVAUT";
 const PROVAUT_PASSWORD = process.env.GARANTI_PROVAUT_PASSWORD!;
 const STORE_KEY = process.env.GARANTI_STORE_KEY!;
-const SUCCESS_URL = process.env.GARANTI_SUCCESS_URL!;  // https://superajan.com/api/odeme/callback
-const ERROR_URL = process.env.GARANTI_ERROR_URL!;      // https://superajan.com/api/odeme/callback
+const SUCCESS_URL = process.env.GARANTI_SUCCESS_URL!;
+const ERROR_URL = process.env.GARANTI_ERROR_URL!;
 
 const GARANTI_3D_URL = "https://sanalposprov.garanti.com.tr/servlet/gt3dengine";
 const GARANTI_PROV_URL = "https://sanalposprov.garanti.com.tr/VPServlet";
 
 function sha1(data: string): string {
-  return createHash("sha1").update(data, "utf-8").digest("hex");
+  return createHash("sha1").update(data, "latin1").digest("hex").toUpperCase();
+}
+
+function sha512(data: string): string {
+  return createHash("sha512").update(data, "latin1").digest("hex").toUpperCase();
 }
 
 function generateOrderId(): string {
@@ -34,50 +38,53 @@ function generateOrderId(): string {
 
 /**
  * Step 1: Generate the 3D Secure enrollment form data.
- * Frontend renders a hidden form and auto-submits to Garanti's 3D page.
  */
 export function initiate3DSecure(params: {
   cardNumber: string;
   expMonth: string;
   expYear: string;
   cvv: string;
-  amount: number; // in TRY kuruş (e.g. 120000 for 1200.00 TRY)
+  amount: number;
   email: string;
   ip: string;
   tenantId: string;
 }) {
   const orderId = generateOrderId();
-  const amountStr = params.amount.toString(); // kuruş cinsinden
-
-  // Garanti 3D Secure Hash
+  const amountStr = params.amount.toString();
   const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
-  // SecurityData = SHA1(password + paddedTerminalId)
-  const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId).toUpperCase();
-  // Hash = SHA1(paddedTerminalId + orderId + amount + successUrl + errorUrl + txnType + installmentCount + storeKey + securityData)
-  const hashData = `${paddedTerminalId}${orderId}${amountStr}${SUCCESS_URL}${ERROR_URL}sales${STORE_KEY}${securityData}`;
-  const secureHash = sha1(hashData).toUpperCase();
 
-  // Debug log
-  console.log("[garanti-3d] hashInput:", JSON.stringify({
-    paddedTerminalId, orderId, amount: amountStr,
-    successUrl: SUCCESS_URL, errorUrl: ERROR_URL,
-    storeKeyLen: STORE_KEY.length, securityData,
-    hash: secureHash,
-  }));
+  // Stage 1: SecurityData = SHA1(password + paddedTerminalId)
+  const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
+
+  // Stage 2: secure3dhash = SHA512(paddedTerminalId + orderId + amount + currencyCode + successUrl + errorUrl + txnType + installmentCount + storeKey + securityData)
+  const hashStr = [
+    paddedTerminalId,
+    orderId,
+    amountStr,
+    "949",        // currencyCode TRY
+    SUCCESS_URL,
+    ERROR_URL,
+    "sales",      // txnType
+    "",           // installmentCount (empty = tek cekim)
+    STORE_KEY,
+    securityData,
+  ].join("");
+
+  const secureHash = sha512(hashStr);
 
   return {
     action: GARANTI_3D_URL,
     fields: {
       mode: "PROD",
-      apiversion: "v1.0",
+      apiversion: "512",
       terminalprovuserid: PROVAUT_USER,
       terminaluserid: PROVAUT_USER,
       terminalmerchantid: MERCHANT_ID,
-      terminalid: TERMINAL_ID.padStart(9, "0"),
+      terminalid: paddedTerminalId,
       txntype: "sales",
       txnamount: amountStr,
-      txncurrencycode: "949", // TRY
-      txninstallmentcount: "", // tek çekim
+      txncurrencycode: "949",
+      txninstallmentcount: "",
       orderid: orderId,
       successurl: SUCCESS_URL,
       errorurl: ERROR_URL,
@@ -89,7 +96,6 @@ export function initiate3DSecure(params: {
       cardexpiredateyear: params.expYear,
       cardcvv2: params.cvv,
       secure3dhash: secureHash,
-      // Custom fields to identify payment on callback
       refreshtime: "0",
     },
     orderId,
@@ -99,7 +105,6 @@ export function initiate3DSecure(params: {
 
 /**
  * Step 2: After 3D verification, complete the payment via Garanti XML API.
- * Called from the callback handler after receiving bank's response.
  */
 export async function complete3DSecure(callbackParams: {
   mdstatus: string;
@@ -113,13 +118,12 @@ export async function complete3DSecure(callbackParams: {
 }): Promise<{ success: boolean; message: string; details?: string }> {
   const { mdstatus, md, cavv, eci, xid, orderid, amount, customeripaddress } = callbackParams;
 
-  // mdstatus must be 1 (fully authenticated) for 3D Secure
   if (mdstatus !== "1") {
     return {
       success: false,
       message: mdstatus === "2" ? "Kart sahibi veya bankası sisteme kayıtlı değil."
         : mdstatus === "3" ? "Kart sahibi veya bankası sisteme kayıtlı değil."
-        : mdstatus === "4" ? "Doğrulama denemesi, kart sahibi sisteme daha sonra kaydolmayı seçmiş."
+        : mdstatus === "4" ? "Doğrulama denemesi."
         : mdstatus === "5" ? "Doğrulama yapılamıyor."
         : mdstatus === "7" ? "Sistem hatası."
         : mdstatus === "8" ? "Bilinmeyen kart no."
@@ -127,23 +131,22 @@ export async function complete3DSecure(callbackParams: {
     };
   }
 
-  // Generate provision password hash: SHA1(PASSWORD + TERMINAL_ID_PADDED)
-  const hashedPassword = sha1(PROVAUT_PASSWORD + TERMINAL_ID.padStart(9, "0")).toUpperCase();
+  const paddedTerminalId = TERMINAL_ID.padStart(9, "0");
 
-  // Generate transaction hash: SHA1(ORDER_ID + TERMINAL_ID + CARD_NUMBER + AMOUNT + HASHED_PASSWORD)
-  // For 3D completion, card number is empty
-  const hashData = `${orderid}${TERMINAL_ID}${amount}${hashedPassword}`;
-  const hash = sha1(hashData).toUpperCase();
+  // Provision hash: SHA512(orderId + paddedTerminalId + amount + securityData)
+  const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
+  const provHashStr = [orderid, paddedTerminalId, amount, securityData].join("");
+  const provHash = sha512(provHashStr);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <GVPSRequest>
   <Mode>PROD</Mode>
-  <Version>v0.01</Version>
+  <Version>512</Version>
   <Terminal>
     <ProvUserID>${PROVAUT_USER}</ProvUserID>
-    <HashData>${hash}</HashData>
+    <HashData>${provHash}</HashData>
     <UserID>${PROVAUT_USER}</UserID>
-    <ID>${TERMINAL_ID.padStart(9, "0")}</ID>
+    <ID>${paddedTerminalId}</ID>
     <MerchantID>${MERCHANT_ID}</MerchantID>
   </Terminal>
   <Customer>
@@ -182,8 +185,6 @@ export async function complete3DSecure(callbackParams: {
     });
 
     const responseText = await response.text();
-
-    // Parse XML response
     const reasonCodeMatch = responseText.match(/<ReasonCode>(\d+)<\/ReasonCode>/);
     const messageMatch = responseText.match(/<ErrorMsg>([^<]*)<\/ErrorMsg>/);
     const reasonCode = reasonCodeMatch ? reasonCodeMatch[1] : "99";
