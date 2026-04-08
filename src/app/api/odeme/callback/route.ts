@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         .eq("id", payment.id);
     }
     // Use 308 to preserve GET after redirect
-    return NextResponse.redirect(`${baseUrl}/odeme?success=true`, 308);
+    return NextResponse.redirect(`${baseUrl}/odeme?success=true`, 303);
   } else {
     if (payment) {
       await supabase
@@ -71,6 +71,6 @@ export async function POST(request: NextRequest) {
         .eq("id", payment.id);
     }
     const errorMsg = encodeURIComponent(result.message);
-    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}`, 308);
+    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}`, 303);
   }
 }
