@@ -137,17 +137,21 @@ export async function complete3DSecure(callbackParams: {
   // SecurityData = SHA1(password + paddedTerminalId)  ← padded (9 hane)
   // HashData = SHA512(orderId + TERMINAL_ID + cardNumber + amount + currencyCode + securityData)  ← raw (8 hane)
   const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
-  const provHashStr = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, "949", securityData].join("");
-  const provHash = sha512(provHashStr);
+  // Try both hash versions
+  const provHashStr512 = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, "949", securityData].join("");
+  const provHash512 = sha512(provHashStr512);
 
-  // Try SHA512 first (Version 512)
+  const provHashStr1 = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, securityData].join("");
+  const provHash1 = sha1(provHashStr1);
+
+  // Use v0.01 + SHA1 first (more compatible), fallback to 512
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <GVPSRequest>
   <Mode>PROD</Mode>
-  <Version>512</Version>
+  <Version>v0.01</Version>
   <Terminal>
     <ProvUserID>${PROVAUT_USER}</ProvUserID>
-    <HashData>${provHash}</HashData>
+    <HashData>${provHash1}</HashData>
     <UserID>${PROVAUT_USER}</UserID>
     <ID>${paddedTerminalId}</ID>
     <MerchantID>${MERCHANT_ID}</MerchantID>
