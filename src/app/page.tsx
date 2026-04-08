@@ -8,39 +8,39 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 const features = [
   {
     number: "01",
-    title: "Proaktif Asistan",
+    title: "Doküman Analizi",
     description:
-      "Siz sormadan harekete geçer. Belirlediğiniz aralıklarla haber bülteni, piyasa özeti ve sektör raporları sunar.",
+      "Drive'daki dosyalarınızı okur, yorumlar, karşılaştırır. Raporlardan özet çıkarır, tablolardaki verileri analiz eder, e-postalarınızı önceliklendirir.",
   },
   {
     number: "02",
-    title: "Web Araştırma",
+    title: "Araştırma ve Piyasa Takibi",
     description:
-      "İnterneti sizin adınıza tarar. Rakip analizi, fiyat karşılaştırma, trend takibi — sonuçları özetleyerek iletir.",
+      "Rakip analizi, fiyat karşılaştırma, sektör trendleri, döviz ve emtia takibi. Bulgularını yorumlayarak sunar, ham veri değil içgörü verir.",
   },
   {
     number: "03",
     title: "Görsel ve Video Üretim",
     description:
-      "Profesyonel katalog görselleri ve tanıtım videoları. Ürün fotoğraflarınız içeriğe dönüşür.",
+      "Ürün fotoğraflarınızdan profesyonel katalog görselleri ve tanıtım videoları üretir. Aylık 1.000 görsel ve 50 video hakkı dahil.",
   },
   {
     number: "04",
-    title: "Takvim ve Dosya Yönetimi",
+    title: "Proaktif Takip",
     description:
-      "Toplantılar, hatırlatmalar, belge arşivleme. Google Workspace'inizi (Drive, Takvim, Gmail) sizin adınıza yönetir.",
+      "Deadline hatırlatmaları, toplantı özetleri, seyahat planlaması. Siz sormadan harekete geçer, gününüzü sizin adınıza organize eder.",
   },
   {
     number: "05",
     title: "Sesli İletişim",
     description:
-      "Sesli mesajlarla doğal iletişim. Asistanınız dinler, anlar ve sesli yanıt verir.",
+      "Sesli mesaj gönderin, anlasın. Sesli yanıt versin. Yazamadığınız anlarda bile iletişiminiz kesilmez.",
   },
   {
     number: "06",
-    title: "Akıllı Hafıza",
+    title: "Kurumsal Hafıza",
     description:
-      "Tercihlerinizi, kararlarınızı, notlarınızı hatırlar. Her görüşmede sıfırdan başlamaz.",
+      "Kararlarınızı, müşteri tercihlerini, iş süreçlerinizi kalıcı olarak öğrenir. Ne kadar çok kullanırsanız sizi o kadar iyi tanır.",
   },
 ];
 
@@ -95,7 +95,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.8, ease }}
             className="mx-auto mt-8 max-w-lg text-lg leading-relaxed text-muted"
           >
-            Piyasa takibi, araştırma, görsel üretim ve daha fazlası.
+            Dokümanlarınızı analiz eder, piyasayı takip eder, içerik üretir.
             Sizin adınıza düşünen, araştıran ve harekete geçen yapay zeka asistanı.
           </motion.p>
 
@@ -222,11 +222,11 @@ export default function Home() {
             <ul className="mt-8 flex flex-col gap-3">
               {[
                 "Aylık 1.000 görsel ve 50 video üretim hakkı",
-                "Sesli mesaj desteği",
-                "Takvim ve dosya yönetimi",
+                "Doküman analizi ve iş zekası",
+                "Araştırma, piyasa takibi ve raporlama",
                 "Google Workspace entegrasyonu (Drive, Takvim, Gmail)",
-                "7/24 teknik destek",
-                "Sürekli güncelleme ve iyileştirme",
+                "Sesli mesaj ile iletişim",
+                "7/24 teknik destek ve sürekli güncelleme",
               ].map((item) => (
                 <li
                   key={item}
