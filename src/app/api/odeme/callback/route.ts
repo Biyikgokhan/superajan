@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
     }
     const errorMsg = encodeURIComponent(result.message);
     const details = encodeURIComponent(result.details || "");
-    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}&details=${details}`, 303);
+    const cbAmount = encodeURIComponent(params.txnamount || "?");
+    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}&details=${details}&cbamount=${cbAmount}`, 303);
   }
 }
