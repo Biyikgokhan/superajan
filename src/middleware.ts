@@ -42,21 +42,6 @@ export async function middleware(request: NextRequest) {
       url.pathname = "/giris";
       return NextResponse.redirect(url);
     }
-
-    // Check if user has completed onboarding (has a tenant record)
-    if (pathname !== "/onboarding") {
-      const { data: tenant } = await supabase
-        .from("tenants")
-        .select("id")
-        .eq("auth_user_id", user.id)
-        .single();
-
-      if (!tenant) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/onboarding";
-        return NextResponse.redirect(url);
-      }
-    }
   }
 
   // Redirect logged-in users away from login page

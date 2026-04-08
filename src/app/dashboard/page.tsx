@@ -22,6 +22,9 @@ export default async function DashboardPage() {
     .eq("auth_user_id", user.id)
     .single();
 
+  // No tenant yet — send to onboarding
+  if (!tenant) redirect("/onboarding");
+
   // Get current month payment status
   const now = new Date();
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
