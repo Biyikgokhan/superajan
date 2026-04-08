@@ -137,7 +137,7 @@ export async function complete3DSecure(callbackParams: {
   // SecurityData = SHA1(password + paddedTerminalId)  ← padded (9 hane)
   // HashData = SHA512(orderId + TERMINAL_ID + cardNumber + amount + currencyCode + securityData)  ← raw (8 hane)
   const securityData = sha1(PROVAUT_PASSWORD + paddedTerminalId);
-  const provHashStr = [orderid, TERMINAL_ID, "" /*cardNumber*/, amount, "949", securityData].join("");
+  const provHashStr = [orderid, paddedTerminalId, "" /*cardNumber*/, amount, "949", securityData].join("");
   const provHash = sha512(provHashStr);
 
   // Try SHA512 first (Version 512)
