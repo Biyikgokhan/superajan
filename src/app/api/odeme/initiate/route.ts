@@ -53,9 +53,8 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
 
-  // Amount: $1200 → need TRY conversion. For now using TRY amount in kuruş.
-  // TODO: Dynamic exchange rate or fixed TRY price
-  const amountKurus = 120000; // 1200.00 TRY (placeholder — adjust to actual pricing)
+  // Amount in kuruş. TEST: 100 = 1.00 TRY | PROD: 120000 = 1200.00 TRY
+  const amountKurus = process.env.GARANTI_TEST_AMOUNT ? parseInt(process.env.GARANTI_TEST_AMOUNT) : 120000;
 
   const result = initiate3DSecure({
     cardNumber: cardNumber.replace(/\s/g, ""),
