@@ -18,16 +18,8 @@ const STORE_KEY = process.env.GARANTI_STORE_KEY!;
 const SUCCESS_URL = process.env.GARANTI_SUCCESS_URL!;  // https://superajan.com/api/odeme/callback
 const ERROR_URL = process.env.GARANTI_ERROR_URL!;      // https://superajan.com/api/odeme/callback
 
-// Toggle: set to true for production, false for test
-const IS_PRODUCTION = process.env.GARANTI_MODE === "PROD";
-
-const GARANTI_3D_URL = IS_PRODUCTION
-  ? "https://sanalposprov.garanti.com.tr/servlet/gt3dengine"
-  : "https://sanalposprovtest.garanti.com.tr/servlet/gt3dengine";
-
-const GARANTI_PROV_URL = IS_PRODUCTION
-  ? "https://sanalposprov.garanti.com.tr/VPServlet"
-  : "https://sanalposprovtest.garanti.com.tr/VPServlet";
+const GARANTI_3D_URL = "https://sanalposprov.garanti.com.tr/servlet/gt3dengine";
+const GARANTI_PROV_URL = "https://sanalposprov.garanti.com.tr/VPServlet";
 
 function sha1(data: string): string {
   return createHash("sha1").update(data, "utf-8").digest("hex");
@@ -64,7 +56,7 @@ export function initiate3DSecure(params: {
   return {
     action: GARANTI_3D_URL,
     fields: {
-      mode: IS_PRODUCTION ? "PROD" : "TEST",
+      mode: "PROD",
       apiversion: "v1.0",
       terminalprovuserid: PROVAUT_USER,
       terminaluserid: PROVAUT_USER,
