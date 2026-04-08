@@ -38,8 +38,8 @@ export default async function DashboardPage() {
 
   const currentMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`;
 
-  // Check if user has Google identity linked
-  const googleConnected = user.app_metadata?.providers?.includes("google") ?? false;
+  // Check if Google Workspace is connected (stored in tenant record)
+  const googleConnected = !!tenant.google_connected_at;
 
   return (
     <DashboardClient

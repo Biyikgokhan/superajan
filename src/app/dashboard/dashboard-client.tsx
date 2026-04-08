@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase-browser";
-
 const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 type Props = {
@@ -75,42 +73,14 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
   const [connecting, setConnecting] = useState(false);
   const [connectError, setConnectError] = useState("");
 
-  const handleConnectGoogle = async () => {
+  const handleConnectGoogle = () => {
     setConnecting(true);
-    setConnectError("");
-    const supabase = createClient();
-    const { error } = await supabase.auth.linkIdentity({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-        scopes: [
-          "https://www.googleapis.com/auth/gmail.modify",
-          "https://www.googleapis.com/auth/calendar",
-          "https://www.googleapis.com/auth/drive",
-          "https://www.googleapis.com/auth/spreadsheets",
-        ].join(" "),
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
-      },
-    });
-    if (error) {
-      setConnectError(error.message);
-      setConnecting(false);
-    }
+    window.location.href = "/api/google/connect";
   };
 
   const handleDisconnectGoogle = async () => {
-    const supabase = createClient();
-    const { data: { user: currentUser } } = await supabase.auth.getUser();
-    const googleIdentity = currentUser?.identities?.find(
-      (i) => i.provider === "google"
-    );
-    if (googleIdentity) {
-      await supabase.auth.unlinkIdentity(googleIdentity);
-      router.refresh();
-    }
+    const res = await fetch("/api/google/disconnect", { method: "POST" });
+    if (res.ok) router.refresh();
   };
 
   return (
