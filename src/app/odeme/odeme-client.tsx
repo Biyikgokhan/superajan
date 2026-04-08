@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
@@ -232,6 +233,17 @@ export function OdemeClient({
   const [loading, setLoading] = useState(false);
   const [contractAccepted, setContractAccepted] = useState(false);
   const [showContract, setShowContract] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const err = searchParams.get("error");
+    const ok = searchParams.get("success");
+    if (ok === "true") setSuccess(true);
+    if (err && err !== "null") setError(decodeURIComponent(err));
+  }, [searchParams]);
 
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\D/g, "").slice(0, 16);
@@ -246,13 +258,77 @@ export function OdemeClient({
     return cleaned;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contractAccepted) return;
     setLoading(true);
-    // TODO: Garanti BBVA sanal POS entegrasyonu
-    setTimeout(() => setLoading(false), 2000);
+    setError(null);
+
+    try {
+      const cleanCard = cardNumber.replace(/\s/g, "");
+      const [expMonth, expYear] = expiry.split("/");
+
+      const res = await fetch("/api/odeme/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cardNumber: cleanCard,
+          expMonth,
+          expYear,
+          cvv,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Bir hata oluştu.");
+        setLoading(false);
+        return;
+      }
+
+      // Create hidden form and submit to Garanti 3D page
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = data.action;
+      for (const [key, value] of Object.entries(data.fields)) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value as string;
+        form.appendChild(input);
+      }
+      document.body.appendChild(form);
+      form.submit();
+    } catch {
+      setError("Bağlantı hatası. Lütfen tekrar deneyin.");
+      setLoading(false);
+    }
   };
+
+  if (success) {
+    return (
+      <div className="flex min-h-screen items-center justify-center px-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease }}
+          className="max-w-md text-center"
+        >
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+            <svg className="h-8 w-8 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 className="mt-6 text-2xl font-bold tracking-tight text-accent">Ödeme Başarılı</h1>
+          <p className="mt-3 text-sm text-muted">Aboneliğiniz aktif edildi. Hizmetiniz 48 saat içinde kullanıma hazır olacaktır.</p>
+          <Link href="/dashboard" className="mt-8 inline-flex h-11 items-center justify-center rounded-full bg-accent px-8 text-sm font-medium text-background transition-all hover:scale-[1.02]">
+            Dashboard&apos;a Git
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-6 pt-32 pb-20">
@@ -357,6 +433,11 @@ export function OdemeClient({
               </p>
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                {error && (
+                  <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4">
+                    <p className="text-sm text-red-400">{error}</p>
+                  </div>
+                )}
                 <div>
                   <label
                     htmlFor="cardName"
