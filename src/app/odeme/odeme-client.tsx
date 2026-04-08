@@ -580,7 +580,7 @@ export function OdemeClient({
                       className="h-5 w-5 rounded-full border-2 border-background/30 border-t-background"
                     />
                   ) : (
-                    "Ödemeyi Tamamla — $1.200"
+                    "Ödemeyi Tamamla"
                   )}
                 </button>
 

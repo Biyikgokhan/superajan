@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
 import { initiate3DSecure } from "@/lib/garanti-pos";
+import { getUsdTryRate } from "@/lib/tcmb-kur";
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -53,30 +54,33 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
 
-  // Amount in kuruş. TEST: 100 = 1.00 TRY | PROD: 120000 = 1200.00 TRY
-  const amountKurus = process.env.GARANTI_TEST_AMOUNT ? parseInt(process.env.GARANTI_TEST_AMOUNT) : 120000;
+  // $1,200 USD → TRY via TCMB selling rate
+  const USD_AMOUNT = 1200;
+  const usdTryRate = await getUsdTryRate();
+  const amountTry = Math.round(USD_AMOUNT * usdTryRate * 100); // kuruş cinsinden
 
   const result = initiate3DSecure({
     cardNumber: cardNumber.replace(/\s/g, ""),
     expMonth,
     expYear,
     cvv,
-    amount: amountKurus,
+    amount: amountTry,
     email: user.email || "",
     ip,
     tenantId: tenantId,
   });
 
   // Store pending payment record
+  const amountTryDecimal = amountTry / 100;
   await supabase.from("payments").upsert(
     {
       tenant_id: tenantId,
       period: currentPeriod,
-      amount: 1200.0,
+      amount: amountTryDecimal,
       currency: "TRY",
       status: "pending",
       payment_method: "card",
-      notes: `Order: ${result.orderId}`,
+      notes: `Order: ${result.orderId} | $${USD_AMOUNT} USD × ${usdTryRate} = ${amountTryDecimal} TRY`,
     },
     { onConflict: "tenant_id,period" }
   );
@@ -84,5 +88,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({
     action: result.action,
     fields: result.fields,
+    rate: usdTryRate,
+    amountTry: amountTryDecimal,
   });
 }
