@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
         .eq("id", payment.id);
     }
     const errorMsg = encodeURIComponent(result.message);
-    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}`, 303);
+    const details = encodeURIComponent(result.details || "");
+    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}&details=${details}`, 303);
   }
 }

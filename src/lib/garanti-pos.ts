@@ -138,6 +138,10 @@ export async function complete3DSecure(callbackParams: {
   const provHashStr = [orderid, paddedTerminalId, amount, securityData].join("");
   const provHash = sha512(provHashStr);
 
+  // Also compute SHA1 hash as fallback (some terminals use v0.01)
+  const provHashV1 = sha1(provHashStr);
+
+  // Try SHA512 first (Version 512)
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <GVPSRequest>
   <Mode>PROD</Mode>
@@ -185,18 +189,49 @@ export async function complete3DSecure(callbackParams: {
     });
 
     const responseText = await response.text();
+    console.log("[garanti-prov] response:", responseText.slice(0, 500));
+
     const reasonCodeMatch = responseText.match(/<ReasonCode>(\d+)<\/ReasonCode>/);
     const messageMatch = responseText.match(/<ErrorMsg>([^<]*)<\/ErrorMsg>/);
+    const sysErrMatch = responseText.match(/<SysErrMsg>([^<]*)<\/SysErrMsg>/);
     const reasonCode = reasonCodeMatch ? reasonCodeMatch[1] : "99";
     const errorMsg = messageMatch ? messageMatch[1] : "Bilinmeyen hata";
+    const sysErr = sysErrMatch ? sysErrMatch[1] : "";
 
     if (reasonCode === "00") {
       return { success: true, message: "Ödeme başarıyla tamamlandı." };
     } else {
+      // If SHA512 fails with password error, retry with v0.01 + SHA1
+      if (errorMsg.toLowerCase().includes("şifre") || errorMsg.toLowerCase().includes("sifre") || reasonCode === "99") {
+        console.log("[garanti-prov] SHA512 failed, retrying with v0.01 + SHA1...");
+        const xmlV1 = xml.replace("<Version>512</Version>", "<Version>v0.01</Version>")
+                         .replace(`<HashData>${provHash}</HashData>`, `<HashData>${provHashV1}</HashData>`);
+
+        const resp2 = await fetch(GARANTI_PROV_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `data=${encodeURIComponent(xmlV1)}`,
+        });
+        const resp2Text = await resp2.text();
+        console.log("[garanti-prov] v0.01 response:", resp2Text.slice(0, 500));
+
+        const rc2 = resp2Text.match(/<ReasonCode>(\d+)<\/ReasonCode>/);
+        const em2 = resp2Text.match(/<ErrorMsg>([^<]*)<\/ErrorMsg>/);
+        const se2 = resp2Text.match(/<SysErrMsg>([^<]*)<\/SysErrMsg>/);
+        if (rc2 && rc2[1] === "00") {
+          return { success: true, message: "Ödeme başarıyla tamamlandı." };
+        }
+        return {
+          success: false,
+          message: `Ödeme başarısız: ${em2?.[1] || errorMsg}`,
+          details: `RC=${rc2?.[1] || reasonCode} SysErr=${se2?.[1] || sysErr}`,
+        };
+      }
+
       return {
         success: false,
         message: `Ödeme başarısız: ${errorMsg}`,
-        details: `ReasonCode: ${reasonCode}`,
+        details: `RC=${reasonCode} SysErr=${sysErr}`,
       };
     }
   } catch (error) {
