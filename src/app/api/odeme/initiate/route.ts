@@ -29,19 +29,14 @@ export async function POST(request: NextRequest) {
     .eq("auth_user_id", user.id)
     .single();
 
-  if (!tenant) {
-    return NextResponse.json(
-      { error: "Hesap bilgisi bulunamadı." },
-      { status: 404 }
-    );
-  }
+  const tenantId = tenant?.id || user.id;
 
   // Check if already paid this month
   const currentPeriod = new Date().toISOString().slice(0, 7); // '2026-04'
   const { data: existingPayment } = await supabase
     .from("payments")
     .select("id, status")
-    .eq("tenant_id", tenant.id)
+    .eq("tenant_id", tenantId)
     .eq("period", currentPeriod)
     .eq("status", "paid")
     .single();
@@ -70,13 +65,13 @@ export async function POST(request: NextRequest) {
     amount: amountKurus,
     email: user.email || "",
     ip,
-    tenantId: tenant.id,
+    tenantId: tenantId,
   });
 
   // Store pending payment record
   await supabase.from("payments").upsert(
     {
-      tenant_id: tenant.id,
+      tenant_id: tenantId,
       period: currentPeriod,
       amount: 1200.0,
       currency: "TRY",
