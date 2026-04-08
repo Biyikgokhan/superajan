@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase-server";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { redirect } from "next/navigation";
 import { DashboardClient } from "./dashboard-client";
 import type { Metadata } from "next";
@@ -15,8 +16,10 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/giris");
 
-  // Get tenant info
-  const { data: tenant } = await supabase
+  // Use admin client to bypass RLS for tenant lookup
+  const admin = getSupabaseAdmin();
+
+  const { data: tenant } = await admin
     .from("tenants")
     .select("*")
     .eq("auth_user_id", user.id)
@@ -26,17 +29,16 @@ export default async function DashboardPage() {
   if (!tenant) redirect("/onboarding");
 
   // Get current month payment status
-  const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-
-  const { data: payment } = await supabase
+  const { data: payment } = await admin
     .from("payments")
     .select("*")
-    .eq("tenant_id", tenant?.id)
-    .eq("period", currentMonth)
+    .eq("tenant_id", tenant.id)
+    .eq("period", `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`)
     .single();
 
-  // Check if user logged in via Google (has Google identity)
+  const currentMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`;
+
+  // Check if user has Google identity linked
   const googleConnected = user.app_metadata?.providers?.includes("google") ?? false;
 
   return (
