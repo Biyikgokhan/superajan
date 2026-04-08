@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
 
-  // $1,200 USD → TRY via TCMB selling rate
-  const USD_AMOUNT = 1200;
+  // USD → TRY via TCMB selling rate
+  const USD_AMOUNT = parseInt(process.env.SUPERAJAN_USD_AMOUNT || "1200");
   const usdTryRate = await getUsdTryRate();
   const amountTry = Math.round(USD_AMOUNT * usdTryRate * 100); // kuruş cinsinden
 
