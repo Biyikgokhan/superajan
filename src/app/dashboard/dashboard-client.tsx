@@ -77,7 +77,7 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
   const handleConnectGoogle = async () => {
     setConnecting(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.linkIdentity({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
