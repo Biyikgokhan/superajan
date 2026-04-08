@@ -3,34 +3,26 @@ import { complete3DSecure } from "@/lib/garanti-pos";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
-  // Garanti POSTs form data to this URL after 3D verification
   const formData = await request.formData();
-
-  const mdstatus = formData.get("mdstatus") as string;
-  const md = formData.get("md") as string;
-  const cavv = formData.get("cavv") as string;
-  const eci = formData.get("eci") as string;
-  const xid = formData.get("xid") as string;
-  const orderid = formData.get("orderid") as string;
-  const txnamount = formData.get("txnamount") as string;
-  const customeripaddress = formData.get("customeripaddress") as string;
-
-  const supabase = supabaseAdmin;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://superajan.com";
 
-  // Find the pending payment by order ID
-  const { data: payment } = await supabase
-    .from("payments")
-    .select("*")
-    .ilike("notes", `%${orderid}%`)
-    .eq("status", "pending")
-    .single();
+  // Log all callback params for debugging
+  const params: Record<string, string> = {};
+  formData.forEach((value, key) => {
+    params[key] = value as string;
+  });
+  console.log("[garanti-callback]", JSON.stringify(params));
 
-  if (!payment) {
-    return NextResponse.redirect(`${baseUrl}/odeme?error=notfound`);
-  }
+  const mdstatus = params.mdstatus || "";
+  const md = params.md || "";
+  const cavv = params.cavv || "";
+  const eci = params.eci || "";
+  const xid = params.xid || "";
+  const orderid = params.orderid || "";
+  const txnamount = params.txnamount || "";
+  const customeripaddress = params.customeripaddress || "";
 
-  // Complete the 3D Secure payment
+  // Complete the 3D Secure payment with Garanti
   const result = await complete3DSecure({
     mdstatus,
     md,
@@ -42,31 +34,43 @@ export async function POST(request: NextRequest) {
     customeripaddress,
   });
 
+  console.log("[garanti-callback] result:", JSON.stringify(result));
+
+  const supabase = supabaseAdmin;
+
+  // Try to find and update existing payment record
+  const { data: payment } = await supabase
+    .from("payments")
+    .select("*")
+    .ilike("notes", `%${orderid}%`)
+    .maybeSingle();
+
   if (result.success) {
-    // Update payment record
-    await supabase
-      .from("payments")
-      .update({
-        status: "paid",
-        paid_at: new Date().toISOString(),
-        notes: `Order: ${orderid} | 3D Secure OK`,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", payment.id);
-
-    return NextResponse.redirect(`${baseUrl}/odeme?success=true`);
+    if (payment) {
+      await supabase
+        .from("payments")
+        .update({
+          status: "paid",
+          paid_at: new Date().toISOString(),
+          notes: `Order: ${orderid} | 3D Secure OK`,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", payment.id);
+    }
+    // Use 308 to preserve GET after redirect
+    return NextResponse.redirect(`${baseUrl}/odeme?success=true`, 308);
   } else {
-    // Mark payment as failed
-    await supabase
-      .from("payments")
-      .update({
-        status: "failed",
-        notes: `Order: ${orderid} | ${result.message} | ${result.details || ""}`,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", payment.id);
-
+    if (payment) {
+      await supabase
+        .from("payments")
+        .update({
+          status: "failed",
+          notes: `Order: ${orderid} | ${result.message} | ${result.details || ""}`,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", payment.id);
+    }
     const errorMsg = encodeURIComponent(result.message);
-    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}`);
+    return NextResponse.redirect(`${baseUrl}/odeme?error=${errorMsg}`, 308);
   }
 }
