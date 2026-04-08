@@ -150,7 +150,7 @@ export async function complete3DSecure(callbackParams: {
     <ProvUserID>${PROVAUT_USER}</ProvUserID>
     <HashData>${provHash}</HashData>
     <UserID>${PROVAUT_USER}</UserID>
-    <ID>${paddedTerminalId}</ID>
+    <ID>${TERMINAL_ID}</ID>
     <MerchantID>${MERCHANT_ID}</MerchantID>
   </Terminal>
   <Customer>
