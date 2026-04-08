@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
-const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_SITE_URL + "/api/google/callback";
-
 const SCOPES = [
   "https://www.googleapis.com/auth/gmail.modify",
   "https://www.googleapis.com/auth/calendar",
@@ -12,9 +9,13 @@ const SCOPES = [
 ].join(" ");
 
 export async function GET() {
+  const clientId = (process.env.GOOGLE_CLIENT_ID || "").trim();
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://superajan.com").trim();
+  const redirectUri = siteUrl + "/api/google/callback";
+
   const params = new URLSearchParams({
-    client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: GOOGLE_REDIRECT_URI,
+    client_id: clientId,
+    redirect_uri: redirectUri,
     response_type: "code",
     scope: SCOPES,
     access_type: "offline",

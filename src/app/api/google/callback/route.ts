@@ -3,19 +3,19 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
-const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_SITE_URL + "/api/google/callback";
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const error = searchParams.get("error");
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://superajan.com";
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://superajan.com").trim();
 
   if (error || !code) {
     return NextResponse.redirect(`${origin}/dashboard?error=google_denied`);
   }
+
+  const clientId = (process.env.GOOGLE_CLIENT_ID || "").trim();
+  const clientSecret = (process.env.GOOGLE_CLIENT_SECRET || "").trim();
+  const redirectUri = origin + "/api/google/callback";
 
   // Exchange code for tokens with Google
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
@@ -23,9 +23,9 @@ export async function GET(request: Request) {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       code,
-      client_id: GOOGLE_CLIENT_ID,
-      client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: GOOGLE_REDIRECT_URI,
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri,
       grant_type: "authorization_code",
     }),
   });
