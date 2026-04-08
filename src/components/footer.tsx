@@ -50,6 +50,7 @@ export function Footer() {
             <p className="text-sm text-muted">+90 531 600 23 07</p>
             <p className="mt-1 text-sm text-muted">contact@biyikgokhan.com</p>
             <p className="mt-1 text-sm text-muted">İstanbul, Türkiye</p>
+            <a href="https://biyikgokhan.com/" className="mt-1 block text-sm text-muted transition-colors hover:text-accent">biyikgokhan.com</a>
           </div>
         </div>
 
