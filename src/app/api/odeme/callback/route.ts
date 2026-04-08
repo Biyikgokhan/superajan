@@ -13,7 +13,12 @@ export async function POST(request: NextRequest) {
   });
   console.log("[garanti-callback]", JSON.stringify(params));
 
+  // DEBUG: if mdstatus indicates failure, redirect with debug info
   const mdstatus = params.mdstatus || "";
+  if (mdstatus !== "1") {
+    const debugInfo = `mdstatus=${mdstatus}&mderrormessage=${encodeURIComponent(params.mderrormessage || "")}&errmsg=${encodeURIComponent(params.errmsg || params.ErrMsg || "")}&response=${encodeURIComponent(params.response || "")}`;
+    return NextResponse.redirect(`${baseUrl}/odeme?error=${encodeURIComponent(params.mderrormessage || params.errmsg || params.ErrMsg || "3D dogrulama basarisiz")}&debug=${debugInfo}`, 303);
+  }
   const md = params.md || "";
   const cavv = params.cavv || "";
   const eci = params.eci || "";
