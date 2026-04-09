@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     .eq("status", "paid");
 
   const isFirstPayment = (paidCount ?? 0) === 0;
-  const baseUsd = isFirstPayment ? 824 : 1000;
+  const baseUsd = isFirstPayment ? 800 : 1000;
   const USD_AMOUNT = Math.round(baseUsd * 1.2); // + %20 KDV
 
   // USD → TRY via TCMB selling rate

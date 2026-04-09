@@ -234,7 +234,7 @@ export function OdemeClient({
   tenant: Tenant | null;
   isFirstPayment?: boolean;
 }) {
-  const baseAmount = isFirstPayment ? 824 : 1000;
+  const baseAmount = isFirstPayment ? 800 : 1000;
   const kdv = Math.round(baseAmount * 0.2);
   const total = baseAmount + kdv;
   const [cardName, setCardName] = useState("");
