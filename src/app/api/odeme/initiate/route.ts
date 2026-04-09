@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import { initiate3DSecure } from "@/lib/garanti-pos";
 import { getUsdTryRate } from "@/lib/tcmb-kur";
 
@@ -54,8 +55,19 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
 
+  // Check if first payment (for transition discount)
+  const admin = getSupabaseAdmin();
+  const { count: paidCount } = await admin
+    .from("payments")
+    .select("*", { count: "exact", head: true })
+    .eq("tenant_id", tenantId)
+    .eq("status", "paid");
+
+  const isFirstPayment = (paidCount ?? 0) === 0;
+  const baseUsd = isFirstPayment ? 824 : 1000;
+  const USD_AMOUNT = Math.round(baseUsd * 1.2); // + %20 KDV
+
   // USD → TRY via TCMB selling rate
-  const USD_AMOUNT = parseInt(process.env.SUPERAJAN_USD_AMOUNT || "1200");
   const usdTryRate = await getUsdTryRate();
   const amountTry = Math.round(USD_AMOUNT * usdTryRate * 100); // kuruş cinsinden
 
