@@ -38,6 +38,29 @@ export default async function DashboardPage() {
 
   const currentMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`;
 
+  // Usage counts for current month
+  const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
+  const monthEnd = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString();
+
+  const [{ count: imageCount }, { count: videoCount }] = await Promise.all([
+    admin
+      .from("usage_analytics")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenant.id)
+      .in("feature", ["image_gen", "sole_swap"])
+      .eq("action", "success")
+      .gte("created_at", monthStart)
+      .lt("created_at", monthEnd),
+    admin
+      .from("usage_analytics")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenant.id)
+      .eq("feature", "video_gen")
+      .eq("action", "success")
+      .gte("created_at", monthStart)
+      .lt("created_at", monthEnd),
+  ]);
+
   // Check if Google Workspace is connected (stored in tenant record)
   const googleConnected = !!tenant.google_connected_at;
 
@@ -48,6 +71,8 @@ export default async function DashboardPage() {
       payment={payment}
       currentMonth={currentMonth}
       googleConnected={googleConnected}
+      imageCount={imageCount ?? 0}
+      videoCount={videoCount ?? 0}
     />
   );
 }

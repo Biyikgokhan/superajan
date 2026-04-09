@@ -18,6 +18,8 @@ type Props = {
   } | null;
   currentMonth: string;
   googleConnected: boolean;
+  imageCount: number;
+  videoCount: number;
 };
 
 function formatMonth(period: string) {
@@ -67,7 +69,7 @@ function GoogleIcon() {
   );
 }
 
-export function DashboardClient({ user, tenant, payment, currentMonth, googleConnected }: Props) {
+export function DashboardClient({ user, tenant, payment, currentMonth, googleConnected, imageCount, videoCount }: Props) {
   const router = useRouter();
   const isPaid = payment?.status === "paid";
   const [connecting, setConnecting] = useState(false);
@@ -190,8 +192,25 @@ export function DashboardClient({ user, tenant, payment, currentMonth, googleCon
             </h2>
             <div className="mt-5 space-y-4">
               {[
-                { label: "Görsel Hakkı", value: "1.000 / ay" },
-                { label: "Depolama", value: "15 GB" },
+                { label: "Görsel", count: imageCount, limit: 1000 },
+                { label: "Video", count: videoCount, limit: 50 },
+              ].map((item) => (
+                <div key={item.label}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted">{item.label}</span>
+                    <span className="text-sm font-medium text-accent">
+                      {item.count.toLocaleString("tr-TR")} / {item.limit.toLocaleString("tr-TR")}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 h-1 w-full rounded-full bg-border">
+                    <div
+                      className="h-1 rounded-full bg-accent transition-all"
+                      style={{ width: `${Math.min((item.count / item.limit) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+              {[
                 { label: "Asistan Tipi", value: "Özel" },
                 { label: "Durum", value: "Aktif" },
               ].map((item) => (
