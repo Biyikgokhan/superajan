@@ -28,10 +28,16 @@ function ContractModal({
   user,
   tenant,
   onClose,
+  amount,
+  kdvAmount,
+  totalAmount,
 }: {
   user: User;
   tenant: Tenant | null;
   onClose: () => void;
+  amount: number;
+  kdvAmount: number;
+  totalAmount: number;
 }) {
   const buyerName =
     tenant?.contact_name || user.user_metadata?.full_name || user.email || "—";
@@ -108,16 +114,16 @@ function ContractModal({
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Aylık Tutar</span>
-                <span className="text-accent">$1.000</span>
+                <span>Tutar</span>
+                <span className="text-accent">${amount.toLocaleString("en-US")}</span>
               </div>
               <div className="flex justify-between">
                 <span>KDV (%20)</span>
-                <span className="text-accent">$200</span>
+                <span className="text-accent">${kdvAmount.toLocaleString("en-US")}</span>
               </div>
               <div className="flex justify-between border-t border-border pt-2 font-semibold">
                 <span className="text-foreground">KDV Dahil Toplam</span>
-                <span className="text-accent">$1.200</span>
+                <span className="text-accent">${totalAmount.toLocaleString("en-US")}</span>
               </div>
               <div className="flex justify-between">
                 <span>Ödeme Yöntemi</span>
@@ -222,10 +228,15 @@ function ContractModal({
 export function OdemeClient({
   user,
   tenant,
+  isFirstPayment = false,
 }: {
   user: User;
   tenant: Tenant | null;
+  isFirstPayment?: boolean;
 }) {
+  const baseAmount = isFirstPayment ? 824 : 1000;
+  const kdv = Math.round(baseAmount * 0.2);
+  const total = baseAmount + kdv;
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -363,9 +374,27 @@ export function OdemeClient({
                 Aylık Paket
               </h2>
               <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-accent">$1.000</span>
-                <span className="text-muted">/ay</span>
+                {isFirstPayment ? (
+                  <>
+                    <span className="text-4xl font-bold text-accent">${baseAmount}</span>
+                    <span className="text-lg text-muted line-through">$1.000</span>
+                    <span className="text-muted">/ay</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-4xl font-bold text-accent">$1.000</span>
+                    <span className="text-muted">/ay</span>
+                  </>
+                )}
               </div>
+              {isFirstPayment && (
+                <div className="mt-3 rounded-lg border border-green-500/20 bg-green-500/5 px-3 py-2">
+                  <p className="text-xs text-green-400">
+                    Geçiş dönemi indirimi — önceki ödemeleriniz düşülmüştür.
+                    Sonraki aylar $1.000 + KDV olarak yansıyacaktır.
+                  </p>
+                </div>
+              )}
 
               <div className="mt-8 border-t border-border pt-6">
                 <ul className="flex flex-col gap-3">
@@ -402,17 +431,22 @@ export function OdemeClient({
 
               <div className="mt-8 border-t border-border pt-6">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted">Aylık tutar</span>
-                  <span className="text-accent">$1.000</span>
+                  <span className="text-muted">{isFirstPayment ? "İlk ay (indirimli)" : "Aylık tutar"}</span>
+                  <span className="text-accent">${baseAmount.toLocaleString("en-US")}</span>
                 </div>
                 <div className="mt-2 flex justify-between text-sm">
                   <span className="text-muted">KDV (%20)</span>
-                  <span className="text-accent">$200</span>
+                  <span className="text-accent">${kdv.toLocaleString("en-US")}</span>
                 </div>
                 <div className="mt-4 flex justify-between border-t border-border pt-4 text-base font-semibold">
                   <span className="text-foreground">Toplam</span>
-                  <span className="text-accent">$1.200</span>
+                  <span className="text-accent">${total.toLocaleString("en-US")}</span>
                 </div>
+                {isFirstPayment && (
+                  <p className="mt-3 text-xs text-muted">
+                    Sonraki aylar: $1.000 + $200 KDV = $1.200
+                  </p>
+                )}
               </div>
             </div>
           </motion.div>
@@ -559,7 +593,7 @@ export function OdemeClient({
                       </button>
                       &apos;ni okudum ve kabul ediyorum. Satın alınan hizmet:
                       Superajan AI İş Asistanı — Aylık Plan, KDV dahil toplam
-                      $1.200, ödeme yöntemi: Online POS.
+                      ${total.toLocaleString("en-US")}, ödeme yöntemi: Online POS.
                     </span>
                   </label>
                 </div>
@@ -614,6 +648,9 @@ export function OdemeClient({
             user={user}
             tenant={tenant}
             onClose={() => setShowContract(false)}
+            amount={baseAmount}
+            kdvAmount={kdv}
+            totalAmount={total}
           />
         )}
       </AnimatePresence>
