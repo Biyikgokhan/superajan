@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   const supabase = getSupabaseAdmin();
 
-  // Try to find and update existing payment record
+  // Find pending payment by orderid (stored in notes)
   const { data: payment } = await supabase
     .from("payments")
     .select("*")
@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
         })
         .eq("id", payment.id);
     }
-    // Use 308 to preserve GET after redirect
     return NextResponse.redirect(`${baseUrl}/odeme?success=true`, 303);
   } else {
     if (payment) {
