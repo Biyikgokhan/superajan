@@ -25,14 +25,17 @@ export default async function OdemePage() {
     .eq("auth_user_id", user.id)
     .single();
 
-  // Check if this is first payment (no previous payments exist)
-  const { count } = await admin
-    .from("payments")
-    .select("*", { count: "exact", head: true })
-    .eq("tenant_id", tenant?.id)
-    .eq("status", "paid");
-
-  const isFirstPayment = (count ?? 0) === 0;
+  // Transition discount only for Marcomen (legacy customer)
+  const MARCOMEN_TENANT_ID = "95186159-cd12-42eb-aa94-0806c798b974";
+  let isFirstPayment = false;
+  if (tenant?.id === MARCOMEN_TENANT_ID) {
+    const { count } = await admin
+      .from("payments")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenant.id)
+      .eq("status", "paid");
+    isFirstPayment = (count ?? 0) === 0;
+  }
 
   return (
     <OdemeClient

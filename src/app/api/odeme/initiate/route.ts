@@ -55,15 +55,18 @@ export async function POST(request: NextRequest) {
     request.headers.get("x-real-ip") ||
     "127.0.0.1";
 
-  // Check if first payment (for transition discount)
+  // Transition discount only for Marcomen (legacy customer)
+  const MARCOMEN_TENANT_ID = "95186159-cd12-42eb-aa94-0806c798b974";
   const admin = getSupabaseAdmin();
-  const { count: paidCount } = await admin
-    .from("payments")
-    .select("*", { count: "exact", head: true })
-    .eq("tenant_id", tenantId)
-    .eq("status", "paid");
-
-  const isFirstPayment = (paidCount ?? 0) === 0;
+  let isFirstPayment = false;
+  if (tenantId === MARCOMEN_TENANT_ID) {
+    const { count: paidCount } = await admin
+      .from("payments")
+      .select("*", { count: "exact", head: true })
+      .eq("tenant_id", tenantId)
+      .eq("status", "paid");
+    isFirstPayment = (paidCount ?? 0) === 0;
+  }
   const baseUsd = isFirstPayment ? 800 : 1000;
   const USD_AMOUNT = Math.round(baseUsd * 1.2); // + %20 KDV
 
