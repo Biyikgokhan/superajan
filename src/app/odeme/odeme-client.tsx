@@ -10,10 +10,16 @@ const ease: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 interface Tenant {
   id: string;
+  name?: string;
   company_name?: string;
   contact_name?: string;
   contact_email?: string;
   contact_phone?: string;
+  billing_type?: "individual" | "corporate" | null;
+  tax_id?: string | null;
+  legal_name?: string | null;
+  tax_office?: string | null;
+  billing_address?: string | null;
 }
 
 function getTodayFormatted() {
@@ -40,10 +46,13 @@ function ContractModal({
   totalAmount: number;
 }) {
   const buyerName =
-    tenant?.contact_name || user.user_metadata?.full_name || user.email || "—";
+    tenant?.legal_name || tenant?.contact_name || tenant?.name || user.email || "—";
   const buyerEmail = tenant?.contact_email || user.email || "—";
   const buyerPhone = tenant?.contact_phone || "—";
-  const buyerCompany = tenant?.company_name || "—";
+  const buyerTaxId = tenant?.tax_id || "";
+  const buyerTaxOffice = tenant?.tax_office || "";
+  const buyerAddress = tenant?.billing_address || "";
+  const isCorporate = tenant?.billing_type === "corporate";
   const contractDate = getTodayFormatted();
 
   return (
@@ -90,8 +99,13 @@ function ContractModal({
                   Alıcı (Kullanıcı)
                 </p>
                 <p className="mt-1 text-sm text-accent">{buyerName}</p>
-                {buyerCompany !== "—" && (
-                  <p className="text-xs">{buyerCompany}</p>
+                {buyerTaxId && (
+                  <p className="text-xs">
+                    {isCorporate ? `${buyerTaxOffice} VD - ${buyerTaxId}` : `TC: ${buyerTaxId}`}
+                  </p>
+                )}
+                {buyerAddress && (
+                  <p className="text-xs">{buyerAddress}</p>
                 )}
                 <p className="text-xs">{buyerEmail}</p>
                 {buyerPhone !== "—" && (
@@ -249,6 +263,19 @@ export function OdemeClient({
   const formRef = useRef<HTMLFormElement>(null);
   const searchParams = useSearchParams();
 
+  // Billing info
+  const [billingType, setBillingType] = useState<"individual" | "corporate">(
+    tenant?.billing_type || "corporate"
+  );
+  const [legalName, setLegalName] = useState(tenant?.legal_name || tenant?.name || "");
+  const [taxId, setTaxId] = useState(tenant?.tax_id || "");
+  const [taxOffice, setTaxOffice] = useState(tenant?.tax_office || "");
+  const [billingAddress, setBillingAddress] = useState(tenant?.billing_address || "");
+  const [billingSaving, setBillingSaving] = useState(false);
+  const [billingSaved, setBillingSaved] = useState(
+    !!(tenant?.tax_id && tenant?.legal_name)
+  );
+
   useEffect(() => {
     const err = searchParams.get("error");
     const ok = searchParams.get("success");
@@ -269,9 +296,52 @@ export function OdemeClient({
     return cleaned;
   };
 
+  const handleSaveBilling = async () => {
+    if (!legalName.trim()) {
+      setError("Ad/unvan zorunlu.");
+      return;
+    }
+    if (billingType === "corporate" && (!taxId.trim() || !taxOffice.trim())) {
+      setError("Kurumsal fatura için VKN ve vergi dairesi zorunlu.");
+      return;
+    }
+    if (billingType === "individual" && !taxId.trim()) {
+      setError("Bireysel fatura için TC Kimlik No zorunlu.");
+      return;
+    }
+    setBillingSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/billing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          billing_type: billingType,
+          legal_name: legalName,
+          tax_id: taxId,
+          tax_office: taxOffice,
+          billing_address: billingAddress,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Fatura bilgileri kaydedilemedi.");
+      } else {
+        setBillingSaved(true);
+      }
+    } catch {
+      setError("Bağlantı hatası.");
+    }
+    setBillingSaving(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contractAccepted) return;
+    if (!billingSaved) {
+      setError("Önce fatura bilgilerinizi kaydedin.");
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -456,8 +526,133 @@ export function OdemeClient({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease }}
-            className="lg:col-span-3"
+            className="lg:col-span-3 space-y-6"
           >
+            {/* Fatura Bilgileri */}
+            <div className="rounded-2xl border border-border bg-surface p-8">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold tracking-tight text-accent">
+                  Fatura Bilgileri
+                </h3>
+                {billingSaved && (
+                  <span className="flex items-center gap-1.5 text-xs text-green-400">
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Kaydedildi
+                  </span>
+                )}
+              </div>
+              <p className="mt-2 text-sm text-muted">
+                Faturanız bu bilgilere göre düzenlenecektir.
+              </p>
+
+              {/* Fatura tipi seçimi */}
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => { setBillingType("corporate"); setBillingSaved(false); }}
+                  className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+                    billingType === "corporate"
+                      ? "border-accent bg-accent text-background"
+                      : "border-border text-muted hover:border-accent hover:text-accent"
+                  }`}
+                >
+                  Kurumsal
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setBillingType("individual"); setBillingSaved(false); }}
+                  className={`rounded-lg border px-4 py-3 text-sm font-medium transition-all ${
+                    billingType === "individual"
+                      ? "border-accent bg-accent text-background"
+                      : "border-border text-muted hover:border-accent hover:text-accent"
+                  }`}
+                >
+                  Bireysel
+                </button>
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <div>
+                  <label className="block text-xs font-medium uppercase tracking-[0.15em] text-muted">
+                    {billingType === "corporate" ? "Şirket Unvanı" : "Ad Soyad"}
+                  </label>
+                  <input
+                    type="text"
+                    value={legalName}
+                    onChange={(e) => { setLegalName(e.target.value); setBillingSaved(false); }}
+                    placeholder={billingType === "corporate" ? "KVK Privacy Ltd. Şti." : "Ad Soyad"}
+                    className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-accent placeholder:text-muted/50 outline-none transition-colors focus:border-accent"
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-medium uppercase tracking-[0.15em] text-muted">
+                      {billingType === "corporate" ? "VKN" : "TC Kimlik No"}
+                    </label>
+                    <input
+                      type="text"
+                      value={taxId}
+                      onChange={(e) => { setTaxId(e.target.value.replace(/\D/g, "").slice(0, 11)); setBillingSaved(false); }}
+                      placeholder={billingType === "corporate" ? "1234567890" : "12345678901"}
+                      maxLength={11}
+                      className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-accent placeholder:text-muted/50 outline-none transition-colors focus:border-accent font-mono"
+                    />
+                  </div>
+
+                  {billingType === "corporate" && (
+                    <div>
+                      <label className="block text-xs font-medium uppercase tracking-[0.15em] text-muted">
+                        Vergi Dairesi
+                      </label>
+                      <input
+                        type="text"
+                        value={taxOffice}
+                        onChange={(e) => { setTaxOffice(e.target.value); setBillingSaved(false); }}
+                        placeholder="Beşiktaş"
+                        className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-accent placeholder:text-muted/50 outline-none transition-colors focus:border-accent"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium uppercase tracking-[0.15em] text-muted">
+                    Fatura Adresi
+                  </label>
+                  <textarea
+                    value={billingAddress}
+                    onChange={(e) => { setBillingAddress(e.target.value); setBillingSaved(false); }}
+                    placeholder="Açık adres"
+                    rows={2}
+                    className="mt-2 block w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-accent placeholder:text-muted/50 outline-none transition-colors focus:border-accent resize-none"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSaveBilling}
+                  disabled={billingSaving || billingSaved}
+                  className="flex h-11 w-full items-center justify-center rounded-full border border-accent text-sm font-medium text-accent transition-all hover:bg-accent hover:text-background disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-accent"
+                >
+                  {billingSaving ? (
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                      className="h-5 w-5 rounded-full border-2 border-accent/30 border-t-accent"
+                    />
+                  ) : billingSaved ? (
+                    "Kaydedildi"
+                  ) : (
+                    "Fatura Bilgilerini Kaydet"
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Kart bilgileri */}
             <div className="rounded-2xl border border-border bg-surface p-8">
               <h3 className="text-lg font-semibold tracking-tight text-accent">
                 Kart Bilgileri
