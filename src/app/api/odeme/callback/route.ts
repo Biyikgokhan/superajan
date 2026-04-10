@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { complete3DSecure } from "@/lib/garanti-pos";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
   console.log("[garanti-callback] result:", JSON.stringify(result));
 
-  const supabase = supabaseAdmin;
+  const supabase = getSupabaseAdmin();
 
   // Try to find and update existing payment record
   const { data: payment } = await supabase

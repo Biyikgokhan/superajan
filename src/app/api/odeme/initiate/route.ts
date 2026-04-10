@@ -24,24 +24,34 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Use admin client to bypass RLS (auth checked above)
+  const admin = getSupabaseAdmin();
+
   // Get tenant for this user
-  const { data: tenant } = await supabase
+  const { data: tenant } = await admin
     .from("tenants")
     .select("id")
     .eq("auth_user_id", user.id)
     .single();
 
-  const tenantId = tenant?.id || user.id;
+  if (!tenant?.id) {
+    return NextResponse.json(
+      { error: "Hesap bilgilerine ulaşılamadı. Lütfen önce onboarding'i tamamlayın." },
+      { status: 400 }
+    );
+  }
+
+  const tenantId = tenant.id;
 
   // Check if already paid this month
   const currentPeriod = new Date().toISOString().slice(0, 7); // '2026-04'
-  const { data: existingPayment } = await supabase
+  const { data: existingPayment } = await admin
     .from("payments")
     .select("id, status")
     .eq("tenant_id", tenantId)
     .eq("period", currentPeriod)
     .eq("status", "paid")
-    .single();
+    .maybeSingle();
 
   if (existingPayment) {
     return NextResponse.json(
@@ -57,7 +67,6 @@ export async function POST(request: NextRequest) {
 
   // Transition discount only for Marcomen (legacy customer)
   const MARCOMEN_TENANT_ID = "95186159-cd12-42eb-aa94-0806c798b974";
-  const admin = getSupabaseAdmin();
   let isFirstPayment = false;
   if (tenantId === MARCOMEN_TENANT_ID) {
     const { count: paidCount } = await admin
@@ -85,9 +94,9 @@ export async function POST(request: NextRequest) {
     tenantId: tenantId,
   });
 
-  // Store pending payment record
+  // Store pending payment record (admin client to bypass RLS)
   const amountTryDecimal = amountTry / 100;
-  await supabase.from("payments").upsert(
+  const { error: upsertError } = await admin.from("payments").upsert(
     {
       tenant_id: tenantId,
       period: currentPeriod,
@@ -99,6 +108,9 @@ export async function POST(request: NextRequest) {
     },
     { onConflict: "tenant_id,period" }
   );
+  if (upsertError) {
+    console.error("[odeme/initiate] payment upsert error:", upsertError);
+  }
 
   return NextResponse.json({
     action: result.action,
